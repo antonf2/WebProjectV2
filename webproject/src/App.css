@@ -1,0 +1,126 @@
+.navbar {
+  background: var(--navbar_background);
+  min-height: 6vh;
+  text-shadow: var(--navbar_text_shadow);
+  box-shadow: var(--navbar_box_shadow);
+}
+
+.nav-toggle-css {
+  display: flex;
+  padding-right: 5%;
+  z-index: 1000;
+}
+
+.text-color {
+  color: var(--content_color);
+}
+
+.nav-text-css {
+  color: var(--navbar_color);
+  font-size: 2vh;
+}
+
+.nav-text-css:hover {
+  color: var(--button-hover-text);
+  background-color: var(--navbar_background_hover);
+}
+
+.footer-div-css {
+  background: var(--footer_background);
+  color: var(--footer_color);
+  text-shadow: var(--footer_text_shadow);
+  box-shadow: var(--footer_box_shadow);
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.router-div-css {
+  background: var(--content_background);
+  color: var(--content_color);
+  text-shadow: var(--content_text_shadow);
+  box-shadow: var(--content_box_shadow);
+}
+
+.footer-description {
+  color: black;
+}
+
+@media (max-width: 700px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 60px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1;
+    width: 80%;
+    height: 30;
+    top: 19%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+  }
+
+  .nav-text-css {
+    color: black;
+  }
+
+  .nav-links.show {
+    display: flex;
+    margin-right: auto;
+  }
+
+  .mobile-menu-button {
+    display: block;
+    border: none;
+    color: var(--content_color);
+    ;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 5px;
+    margin-left: 10%;
+  }
+
+  .mobile-menu-button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+}
+
+.form-bg {
+  background: var(--navbar_background);
+}
+
+@media (min-width: 701px) {
+  .mobile-menu-button {
+    display: none;
+  }
+}
+
+.p-font {
+  font-family: 'BioRhyme Expanded', serif;
+  font-size: 3vh;
+  color: var(--brand_color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.form-container {
+  margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    position: static;
+    transform: none;
+    margin-top: 20px;
+    z-index: 0;
+  }
+
+  .form-bg {
+    overflow: auto;
+    margin-top: 25vh;
+    z-index: 1;
+  }
+}
