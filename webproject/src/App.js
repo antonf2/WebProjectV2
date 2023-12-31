@@ -13,31 +13,35 @@ import { UserProfilePage } from "./Components/Pages/userProfile";
 export const App = () => {
   return (
     <>
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route element={<PrivateRoute />}>
-            <Route path="/home" element={<LoggedInHomePage />} />
-          </Route>
-          <Route element={<PrivateRoute />}>
-            <Route path="/favorites" element={<FavoritesPage />} />
-          </Route>
-          <Route element={<PrivateRoute />}>
-            <Route path="/about" element={<AboutUsPage />} />
-          </Route>
-          <Route element={<PrivateRoute />}>
-            <Route path="/contact" element={<ContactUsPage />} />
-          </Route>
-          <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<UserProfilePage />} />
-          </Route>
+          <Route
+            path="/home"
+            element={<PrivateRoute element={<LoggedInHomePage />} />}
+          />
+          <Route
+            path="/favorites"
+            element={<PrivateRoute element={<FavoritesPage />} />}
+          />
+          <Route
+            path="/about"
+            element={<PrivateRoute element={<AboutUsPage />} />}
+          />
+          <Route
+            path="/contact"
+            element={<PrivateRoute element={<ContactUsPage />} />}
+          />
+          <Route
+            path="/profile"
+            element={<PrivateRoute element={<UserProfilePage />} />}
+          />
         </Routes>
       </BrowserRouter>
     </>
   );
-}
+};
 
 export default App;

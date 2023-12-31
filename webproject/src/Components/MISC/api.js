@@ -74,12 +74,24 @@ export const GetUsers = async () => {
     throw error;
   }
 };
+
 export const LoginUser = async (loginForm) => {
   try {
     const response = await axios.post(`${url}/login/${projectId}`, loginForm);
-    return response.data;
+
+    if (response.status === 200) {
+      const token = response.data.token;
+      localStorage.setItem("USER_TOKEN", token);
+      return response.data;
+    }
   } catch (error) {
-    console.error("Error logging in:", error);
+    if (error.response && error.response.status === 401) {
+      console.error(
+        "Invalid credentials. Please check your email and password."
+      );
+    } else {
+      console.error("Error logging in:", error);
+    }
     throw error;
   }
 };
@@ -89,8 +101,7 @@ export const RegisterUser = async (registerForm) => {
     if (registerForm.Password === registerForm.ConfirmPassword) {
       const response = await axios.post(`${url}/user/`, registerForm);
       return response.data;
-    }
-    else alert("Passwords do not match, please try again.")
+    } else alert("Passwords do not match, please try again.");
   } catch (error) {
     console.error("Error registering user:", error);
     throw error;
@@ -98,7 +109,7 @@ export const RegisterUser = async (registerForm) => {
 };
 
 export const GetCards = async () => {
-  var token = localStorage.getItem("USER_TOKEN")
+  var token = localStorage.getItem("USER_TOKEN");
   try {
     if (!token) {
       throw new Error("User token not found.");
@@ -118,13 +129,14 @@ export const GetCards = async () => {
 };
 
 export const AddCard = async (cardData) => {
+  var token = localStorage.getItem("USER_TOKEN");
   var uploaddata = {
     Scope: "Public",
     Data: cardData,
   };
   try {
     if (!token) {
-      throw new Error("User token not found in localStorage.");
+      throw new Error(`User token not found in localStorage.token:${token}`);
     }
     const response = axios.post(
       `${url}/item/${projectId}_BusinessCard`,
@@ -143,7 +155,7 @@ export const AddCard = async (cardData) => {
 };
 
 export const GetFavoriteCards = async () => {
-  var token = localStorage.getItem("USER_TOKEN")
+  var token = localStorage.getItem("USER_TOKEN");
   try {
     if (!token) {
       throw new Error("User token not found.");

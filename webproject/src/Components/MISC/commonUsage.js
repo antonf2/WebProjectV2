@@ -1,10 +1,13 @@
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
+import { NavBar } from "../Shared/header";
+import { Footer } from "../Shared/footer";
 
 export const projectId = "8c2c3244-cb44-475b-8f34-98d2b2ba4cd5";
 export const token = localStorage.getItem("USER_TOKEN");
 export const url =
   "https://gnte7mjwg9.execute-api.us-east-1.amazonaws.com/newdev";
+
 export const Decode = () => {
   const [decodedToken, setDecodedToken] = useState(null);
   useEffect(() => {
@@ -15,4 +18,16 @@ export const Decode = () => {
   }, []);
   return decodedToken;
 };
+
 export const userToken = Decode;
+
+export const isAuthenticated = () => {
+  return localStorage.getItem("USER_TOKEN");
+};
+export const Layout = ({ children }) => (
+  <div>
+    <NavBar />
+    <div>{children}</div>
+    <Footer />
+  </div>
+);

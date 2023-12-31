@@ -1,12 +1,10 @@
-import { Navigate, Outlet } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { Navigate } from "react-router-dom";
+import { Layout, isAuthenticated } from "./commonUsage";
 
-
-export const PrivateRoute = (path) => {
-    useEffect(() => {
-        setToken(localStorage.getItem('USER_TOKEN'));
-    }, []);
-    const [token, setToken] = useState();
-    let auth = { 'token': token }
-    return auth.token ? <Outlet /> : <Navigate to={path} />
-}
+export const PrivateRoute = ({ element }) => {
+  return isAuthenticated() ? (
+    <Layout>{element}</Layout>
+  ) : (
+    <Navigate to="/login" />
+  );
+};

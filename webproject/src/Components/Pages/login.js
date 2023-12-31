@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const [message, setMessage] = useState();
   const [loginForm, setLoginForm] = useState({
     Email: "",
     Password: "",
@@ -16,22 +17,34 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await LoginUser(loginForm);
-      localStorage.setItem("USER_TOKEN", response.token);
-      navigate("/home")
-    } catch (error) {
-      console.error("Error logging in:", error);
+    if (loginForm.Email && loginForm.Password) {
+      try {
+        const response = await LoginUser(loginForm);
+        if (response && response.token) {
+          navigate("/home");
+        }
+      } catch (error) {
+        setMessage("Wrong Credentials");
+      }
+    } else {
+      setMessage("Please fill in both email and password");
     }
   };
 
   return (
     <div className="container position-absolute top-50 start-50 translate-middle d-flex justify-content-center">
-      <form className="w-full max-w-sm border border-dark rounded-lg border-2 bg-form-bg p-3 form-bg " onSubmit={handleSubmit}>
+      <form
+        className="w-full max-w-sm border border-dark rounded-lg border-2 bg-form-bg p-3 form-bg "
+        onSubmit={handleSubmit}
+      >
+        <p className="text-red-600 font-bold text-center">{message}</p>
         <div className="mb-6 pt-4 pr-6 ml-1">
           <div className="md:flex md:items-center mb-4">
             <div className="md:w-1/3">
-              <label className="block text-color font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-email">
+              <label
+                className="block text-color font-bold md:text-right mb-1 md:mb-0 pr-4"
+                htmlFor="inline-email"
+              >
                 Email
               </label>
             </div>
@@ -49,7 +62,10 @@ export const Login = () => {
           </div>
           <div className="md:flex md:items-center">
             <div className="md:w-1/3">
-              <label className="block text-color font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
+              <label
+                className="block text-color font-bold md:text-right mb-1 md:mb-0 pr-4"
+                htmlFor="inline-password"
+              >
                 Password
               </label>
             </div>
@@ -73,13 +89,19 @@ export const Login = () => {
               className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
               type="submit"
             >
-              Sign Up
+              Sign In
             </button>
           </div>
         </div>
         <p className="mt-2 mb-2 text-center">
           Dont have an account?{" "}
-          <button type="button" className="text-blue-500 hover:underline" onClick={() => navigate('/register')}>Get Started</button>
+          <button
+            type="button"
+            className="text-blue-500 hover:underline"
+            onClick={() => navigate("/register")}
+          >
+            Get Started
+          </button>
         </p>
       </form>
     </div>
