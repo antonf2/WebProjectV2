@@ -82,7 +82,9 @@ export const LoginUser = async (loginForm) => {
     if (response.status === 200) {
       const token = response.data.token;
       localStorage.setItem("USER_TOKEN", token);
-      return response.data;
+      return response;
+    } else {
+      console.error(response.data.message);
     }
   } catch (error) {
     if (error.response && error.response.status === 401) {
@@ -109,12 +111,7 @@ export const RegisterUser = async (registerForm) => {
 };
 
 export const GetCards = async () => {
-  var token = localStorage.getItem("USER_TOKEN");
   try {
-    if (!token) {
-      throw new Error("User token not found.");
-    }
-
     const response = await axios.get(`${url}/item/${projectId}_BusinessCard`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -129,7 +126,6 @@ export const GetCards = async () => {
 };
 
 export const AddCard = async (cardData) => {
-  var token = localStorage.getItem("USER_TOKEN");
   var uploaddata = {
     Scope: "Public",
     Data: cardData,
@@ -147,6 +143,7 @@ export const AddCard = async (cardData) => {
         },
       }
     );
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error creating card:", error);
@@ -154,14 +151,9 @@ export const AddCard = async (cardData) => {
   }
 };
 
-export const GetFavoriteCards = async () => {
-  var token = localStorage.getItem("USER_TOKEN");
+export const GetFavoriteCards = async (user) => {
   try {
-    if (!token) {
-      throw new Error("User token not found.");
-    }
-
-    const response = await axios.get(`${url}/item/${projectId}_UserFavorites`, {
+    const response = await axios.get(`${url}/item/${projectId}_${user}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -174,17 +166,34 @@ export const GetFavoriteCards = async () => {
   }
 };
 
-export const AddFavoriteCard = async (favoriteData) => {
+export const AddFavoriteCard = async (CardID, user) => {
   var uploaddata = {
     Scope: "Public",
-    Data: favoriteData,
+    Data: { CardID },
   };
   try {
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
+    const existingItemsResponse = await axios.get(
+      `${url}/item/${projectId}_${user}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const existingItems = existingItemsResponse.data;
+    const isDuplicate = existingItems.some(
+      (item) => item.Data.CardID === CardID
+    );
+    if (isDuplicate) {
+      console.log("Item with the same value already exists. Not adding.");
+      // You can return the existing item or handle it as needed.
+      return;
+    }
     const response = axios.post(
-      `${url}/item/${projectId}_UserFavorites/`,
+      `${url}/item/${projectId}_${user}/`,
       uploaddata,
       {
         headers: {

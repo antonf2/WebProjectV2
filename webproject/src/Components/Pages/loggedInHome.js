@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddCard } from "../MISC/api";
 import jwtDecode from "jwt-decode";
 import { CustomCard } from "../CardComponents/card";
@@ -26,10 +26,7 @@ export const LoggedInHomePage = () => {
   const handleSubmit = async (e) => {
     try {
       const response = await AddCard(cardData);
-      if (response) {
-        alert("Card Has been Created");
-      }
-      handleClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error Creating Card:", error);
     }

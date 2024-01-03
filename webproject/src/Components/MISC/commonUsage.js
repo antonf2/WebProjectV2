@@ -8,7 +8,7 @@ export const token = localStorage.getItem("USER_TOKEN");
 export const url =
   "https://gnte7mjwg9.execute-api.us-east-1.amazonaws.com/newdev";
 
-export const Decode = () => {
+const Decode = () => {
   const [decodedToken, setDecodedToken] = useState(null);
   useEffect(() => {
     if (token) {
@@ -19,15 +19,4 @@ export const Decode = () => {
   return decodedToken;
 };
 
-export const userToken = Decode;
-
-export const isAuthenticated = () => {
-  return localStorage.getItem("USER_TOKEN");
-};
-export const Layout = ({ children }) => (
-  <div>
-    <NavBar />
-    <div>{children}</div>
-    <Footer />
-  </div>
-);
+export const userToken = <Decode />;

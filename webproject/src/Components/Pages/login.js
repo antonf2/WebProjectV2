@@ -14,28 +14,40 @@ export const Login = () => {
     setLoginForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e) => {
+  const HandleSubmit = async (e) => {
     e.preventDefault();
+    e.persist();
+
+    console.log("Submit button clicked");
 
     if (loginForm.Email && loginForm.Password) {
       try {
+        console.log("Attempting to login...");
+
         const response = await LoginUser(loginForm);
-        if (response && response.token) {
+        console.log("Login response:", response);
+
+        if (response && response.data.token) {
+          console.log("Going to /home");
           navigate("/home");
+        } else {
+          console.log("Token not found in the response");
+          setMessage("Token not found in the response");
         }
       } catch (error) {
+        console.error("Error during login:", error);
         setMessage("Wrong Credentials");
       }
-    } else {
-      setMessage("Please fill in both email and password");
+    } else if (!loginForm.Email && !loginForm.Password) {
+      console.log("Credentials not filled");
+      setMessage("Please fill Credentials");
     }
   };
-
   return (
     <div className="container position-absolute top-50 start-50 translate-middle d-flex justify-content-center">
       <form
         className="w-full max-w-sm border border-dark rounded-lg border-2 bg-form-bg p-3 form-bg "
-        onSubmit={handleSubmit}
+        onSubmit={HandleSubmit}
       >
         <p className="text-red-600 font-bold text-center">{message}</p>
         <div className="mb-6 pt-4 pr-6 ml-1">
