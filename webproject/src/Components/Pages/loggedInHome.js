@@ -1,9 +1,9 @@
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { useEffect, useState } from "react";
-import { AddCard } from "../MISC/api";
+import { useState } from "react";
 import jwtDecode from "jwt-decode";
 import { CustomCard } from "../CardComponents/card";
+import { AddCard } from "../API/cardAPI";
 
 export const LoggedInHomePage = () => {
   const UserToken = jwtDecode(localStorage.getItem("USER_TOKEN"));
@@ -36,7 +36,7 @@ export const LoggedInHomePage = () => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <CustomCard />
+      <CustomCard element={UserToken} />
       <div className="router-div-css text-center p-5">
         <button
           type="button"

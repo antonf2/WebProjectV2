@@ -1,78 +1,64 @@
 import { useEffect, useState } from "react";
-import { AddFavoriteCard, GetCards, GetFavoriteCards } from "../MISC/api";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
-import jwtDecode from "jwt-decode";
-import { token } from "../MISC/commonUsage";
-import { useNavigate } from "react-router-dom";
+import { ManageFavoriteCard } from "../API/favoritesAPI";
+import { loadCardData } from "../loaders.js/loadCardData";
 
-export const CustomCard = () => {
-  const navigate = useNavigate();
+export const CustomCard = (token) => {
   const [cardDataReceived, setCardDataReceived] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [decodedToken, setDecodedToken] = useState(null);
-  const [favorites, setFavorites] = useState({});
+  const [favorites, setFavorites] = useState([]);
+  const userToken = localStorage.getItem("USER_TOKEN");
 
   useEffect(() => {
     if (token) {
-      const decoded = jwtDecode(token);
-      loadCardData(decoded.Email);
-    } else if (!token) {
-      navigate("/login");
+      try {
+        handleLoadCardData(token.element.Email);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
     }
-  }, []);
-
-  cardDataReceived.forEach((card) => {
-    // initialFavorites[card.ItemID] =
-  });
+  }, [token]);
 
   const handleClick = (index) => {
     setExpanded(index === expanded ? null : index);
-    console.log(favorites);
-    console.log(decodedToken);
   };
 
   const handleFavorite = (itemID) => {
-    setFavorites((prevFavorites) => ({
-      ...prevFavorites,
-      [itemID]: !prevFavorites[itemID],
-    }));
-    if (!favorites[itemID]) {
+    const isFavorite = favorites.includes(itemID);
+
+    setFavorites((prevFavorites) => {
+      const newFavorites = isFavorite
+        ? prevFavorites.filter((id) => id !== itemID)
+        : [...prevFavorites, itemID];
+
       favoriteToAPI(itemID);
-    }
+      return newFavorites;
+    });
   };
 
   const favoriteToAPI = async (CardID) => {
     try {
-      const response = await AddFavoriteCard(CardID, decodedToken.Email);
-      console.log(response);
+      const response = await ManageFavoriteCard(
+        CardID,
+        token.element.Email,
+        userToken
+      );
     } catch (error) {
-      console.error("Error adding favorite:", error);
-    }
-  };
-  const loadCardData = async (user) => {
-    console.log(user);
-    const response = await GetFavoriteCards(user);
-    setFavorites(response);
-    if (response) {
-      console.log(response);
-      getCards();
+      console.error("Error adding/removing favorite:", error);
     }
   };
 
-  const getCards = async () => {
-    try {
-      const response = await GetCards();
-      setCardDataReceived(response);
-      setIsLoading(false);
-      console.log(response);
-    } catch (error) {
-      console.error("Error getting cards data:", error);
-      setError(error);
-      setIsLoading(false);
-    }
+  const handleLoadCardData = async (user) => {
+    await loadCardData(
+      user,
+      setFavorites,
+      setCardDataReceived,
+      setIsLoading,
+      setError
+    );
   };
 
   return (
@@ -100,7 +86,7 @@ export const CustomCard = () => {
               >
                 <div className="card-content flex flex-col text-center pb-4 font-normal p-2 relative">
                   <div className="absolute top-3 right-3">
-                    {favorites[card.ItemID] ? (
+                    {favorites.includes(card.ItemID) ? (
                       <FaHeart
                         className="text-stone-600 cursor-pointer text-xl"
                         onClick={(e) => {

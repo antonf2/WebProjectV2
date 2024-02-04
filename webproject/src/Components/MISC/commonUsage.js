@@ -1,7 +1,5 @@
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
-import { NavBar } from "../Shared/header";
-import { Footer } from "../Shared/footer";
 
 export const projectId = "8c2c3244-cb44-475b-8f34-98d2b2ba4cd5";
 export const token = localStorage.getItem("USER_TOKEN");
