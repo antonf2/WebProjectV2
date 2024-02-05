@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
-import { ManageFavoriteCard } from "../API/favoritesAPI";
+import { favoriteHandler } from "../Handle/handleFavorite";
 
 export const CustomCard = ({
   token,
@@ -31,24 +31,13 @@ export const CustomCard = ({
   };
 
   const handleFavorite = (itemID) => {
-    const isFavorite = favorites.includes(itemID);
-
-    setFavorites((prevFavorites) => {
-      const newFavorites = isFavorite
-        ? prevFavorites.filter((id) => id !== itemID)
-        : [...prevFavorites, itemID];
-
-      favoriteToAPI(itemID);
-      return newFavorites;
-    });
-  };
-
-  const favoriteToAPI = async (CardID) => {
-    try {
-      const response = await ManageFavoriteCard(CardID, token.Email, userToken);
-    } catch (error) {
-      console.error("Error adding/removing favorite:", error);
-    }
+    const response = favoriteHandler(
+      itemID,
+      favorites,
+      setFavorites,
+      userToken,
+      token.Email
+    );
   };
 
   return (

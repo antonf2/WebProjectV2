@@ -26,7 +26,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken) => {
       `${url}/item/${projectId}_${user}/`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );
@@ -47,7 +47,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken) => {
           `${url}/item/${projectId}_${user}/${itemToDelete.ItemID}/`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${userToken}`,
             },
           }
         );
@@ -65,7 +65,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken) => {
       uploaddata,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );

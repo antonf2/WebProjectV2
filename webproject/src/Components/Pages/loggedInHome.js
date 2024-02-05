@@ -1,10 +1,10 @@
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import jwtDecode from "jwt-decode";
 import { CustomCard } from "../CardComponents/card";
 import { AddCard } from "../API/cardAPI";
-import { redirect, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 
 export const LoggedInHomePage = () => {
   const UserToken = jwtDecode(localStorage.getItem("USER_TOKEN"));
