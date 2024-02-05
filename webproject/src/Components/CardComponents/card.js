@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { ManageFavoriteCard } from "../API/favoritesAPI";
-import { loadCardData } from "../loaders.js/loadCardData";
 
-export const CustomCard = (token) => {
+export const CustomCard = ({
+  token,
+  dataFavorites,
+  dataCardDataReceived,
+  dataLoading,
+  dataError,
+}) => {
   const [cardDataReceived, setCardDataReceived] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,13 +19,12 @@ export const CustomCard = (token) => {
 
   useEffect(() => {
     if (token) {
-      try {
-        handleLoadCardData(token.element.Email);
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
+      setFavorites(dataFavorites);
+      setCardDataReceived(dataCardDataReceived);
+      setIsLoading(dataLoading);
+      setError(dataError);
     }
-  }, [token]);
+  }, []);
 
   const handleClick = (index) => {
     setExpanded(index === expanded ? null : index);
@@ -41,24 +45,10 @@ export const CustomCard = (token) => {
 
   const favoriteToAPI = async (CardID) => {
     try {
-      const response = await ManageFavoriteCard(
-        CardID,
-        token.element.Email,
-        userToken
-      );
+      const response = await ManageFavoriteCard(CardID, token.Email, userToken);
     } catch (error) {
       console.error("Error adding/removing favorite:", error);
     }
-  };
-
-  const handleLoadCardData = async (user) => {
-    await loadCardData(
-      user,
-      setFavorites,
-      setCardDataReceived,
-      setIsLoading,
-      setError
-    );
   };
 
   return (

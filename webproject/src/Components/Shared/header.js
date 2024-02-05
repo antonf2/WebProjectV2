@@ -9,7 +9,6 @@ const navigationList = [
 ];
 
 export const NavBar = (props) => {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const toggleProfileLinks = () => {

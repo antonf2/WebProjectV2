@@ -1,10 +1,6 @@
-import { Navigate } from "react-router-dom";
-import { Footer } from "../Shared/footer";
+import { Navigate, Outlet } from "react-router-dom";
 import { NavBar } from "../Shared/header";
-
-export const isAuthenticated = () => {
-  return localStorage.getItem("USER_TOKEN");
-};
+import { Footer } from "../Shared/footer";
 
 const Layout = ({ children }) => (
   <div>
@@ -15,8 +11,12 @@ const Layout = ({ children }) => (
 );
 
 export const PrivateRoute = ({ element }) => {
-  return isAuthenticated() ? (
-    <Layout>{element}</Layout>
+  const userToken = localStorage.getItem("USER_TOKEN");
+
+  return userToken ? (
+    <Layout>
+      <Outlet />{" "}
+    </Layout>
   ) : (
     <Navigate to="/login" />
   );

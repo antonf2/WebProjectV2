@@ -1,12 +1,14 @@
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 import { CustomCard } from "../CardComponents/card";
 import { AddCard } from "../API/cardAPI";
+import { redirect, useLoaderData } from "react-router-dom";
 
 export const LoggedInHomePage = () => {
   const UserToken = jwtDecode(localStorage.getItem("USER_TOKEN"));
+  const data = useLoaderData();
   const [cardData, setCardData] = useState({
     title: "",
     description: "",
@@ -36,7 +38,13 @@ export const LoggedInHomePage = () => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <CustomCard element={UserToken} />
+      <CustomCard
+        token={UserToken}
+        dataFavorites={data.favorites}
+        dataCardDataReceived={data.cardDataReceived}
+        dataLoading={data.loading}
+        dataError={data.error}
+      />
       <div className="router-div-css text-center p-5">
         <button
           type="button"

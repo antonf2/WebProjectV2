@@ -1,6 +1,15 @@
+import { useEffect } from "react";
 import { FeauredCard } from "../CardComponents/featuredCards";
+import { Navigate } from "react-router-dom";
 
 export const HomePage = () => {
+  useEffect(() => {
+    const userToken = localStorage.getItem("USER_TOKEN");
+
+    if (userToken) {
+      <Navigate to="/home" replace={true} />;
+    }
+  }, []);
   return (
     <div className="container">
       <div className="bg-zinc-400 py-6 text-zinc-800 shadow-lg top rounded-b-lg z-10">
