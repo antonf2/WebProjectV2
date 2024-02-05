@@ -37,7 +37,7 @@ export const LoggedInHomePage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
-    <>
+    <div className="bg-zinc-200 min-h-fit">
       <CustomCard
         token={UserToken}
         dataFavorites={data.favorites}
@@ -160,6 +160,6 @@ export const LoggedInHomePage = () => {
           </Modal.Footer>
         </Modal>
       </div>
-    </>
+    </div>
   );
 };

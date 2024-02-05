@@ -41,8 +41,8 @@ export const CustomCard = ({
   };
 
   return (
-    <>
-      <section className="router-div-css py-16 flex flex-col min-h-full bg-zinc-200">
+    <div>
+      <section className="router-div-css py-16 flex flex-col min-h-min bg-zinc-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-extrabold">Explore Our Cards</h2>
           <h3 className="text-xl font-bold mt-3">
@@ -107,6 +107,6 @@ export const CustomCard = ({
           )}
         </div>
       </section>
-    </>
+    </div>
   );
 };

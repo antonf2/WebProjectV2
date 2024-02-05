@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import { LoginUser } from "../API/userAPI";
 
 export const Login = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState();
+  const navigation = useNavigation();
+  const isLoading = navigation.state !== "idle";
   const [loginForm, setLoginForm] = useState({
     Email: "",
     Password: "",
@@ -28,7 +30,7 @@ export const Login = () => {
         console.error("Error during login:", error);
         setMessage("Wrong Credentials");
       }
-    } else if (!loginForm.Email && !loginForm.Password) {
+    } else if (!loginForm.Email || !loginForm.Password) {
       setMessage("Please fill Credentials");
     }
   };
@@ -36,7 +38,12 @@ export const Login = () => {
     <section className="bg-zinc-200 h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div
+            id="detail"
+            className={`p-6 space-y-4 md:space-y-6 sm:p-8 ${
+              isLoading ? "loading" : ""
+            }`}
+          >
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Sign in to your account
             </h1>

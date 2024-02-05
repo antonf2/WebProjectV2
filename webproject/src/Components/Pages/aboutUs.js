@@ -1,7 +1,7 @@
 export const AboutUsPage = () => {
   return (
     <>
-      <div className="router-div-css min-h-screen flex flex-col">
+      <div className="relative">
         <div className="flex-grow flex justify-center items-center">
           <section className="py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

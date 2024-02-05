@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { DarkMode } from "../DarkMode/DarkMode";
 const navigationList = [
@@ -19,7 +19,7 @@ export const NavBar = (props) => {
   };
   return (
     <>
-      <nav className="navbar navbar-expand align-items-center d-flex bd-highlight ">
+      <nav className="navbar navbar-expand bd-highlight ">
         <div className="me-auto p-2 bd-highlight bd-highlight p-font">
           <h1>BIZSPOT</h1>
         </div>
