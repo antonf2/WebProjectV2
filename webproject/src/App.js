@@ -1,8 +1,4 @@
-import {
-  RouterProvider,
-  createBrowserRouter,
-  useNavigation,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import { Login } from "./Components/Pages/login";
 import { Register } from "./Components/Pages/register";
@@ -16,6 +12,7 @@ import { PrivateRoute } from "./Components/MISC/authentication";
 import { ErrorPage } from "./Components/Pages/error";
 import { loadCardData } from "./Components/loaders/loadCardData";
 import { CheckLoggedIn } from "./Components/loaders/checkLoggedIn";
+import { MyCards } from "./Components/Pages/myCards";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +40,7 @@ const router = createBrowserRouter([
         path: "/favorites",
         element: <FavoritesPage />,
         errorElement: <ErrorPage />,
+        loader: loadCardData,
       },
       {
         path: "/contact",
@@ -62,6 +60,12 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <LoggedInHomePage />,
+        errorElement: <ErrorPage />,
+        loader: loadCardData,
+      },
+      {
+        path: "/my_cards",
+        element: <MyCards />,
         errorElement: <ErrorPage />,
         loader: loadCardData,
       },

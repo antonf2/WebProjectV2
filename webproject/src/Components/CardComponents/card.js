@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaTrashAlt } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { favoriteHandler } from "../Handle/handleFavorite";
+import { handleDeleteCard } from "../Handle/handleDeleteCard";
 
 export const CustomCard = ({
   token,
@@ -9,6 +10,7 @@ export const CustomCard = ({
   dataCardDataReceived,
   dataLoading,
   dataError,
+  pageMessage,
 }) => {
   const [cardDataReceived, setCardDataReceived] = useState([]);
   const [expanded, setExpanded] = useState(null);
@@ -24,27 +26,31 @@ export const CustomCard = ({
       setIsLoading(dataLoading);
       setError(dataError);
     }
-  }, []);
+  }, [token, dataFavorites, dataCardDataReceived, dataLoading, dataError]);
 
   const handleClick = (index) => {
     setExpanded(index === expanded ? null : index);
   };
 
-  const handleFavorite = (itemID) => {
-    const response = favoriteHandler(
+  const handleDelete = (itemID) => {
+    handleDeleteCard(
       itemID,
       favorites,
       setFavorites,
       userToken,
-      token.Email
+      setCardDataReceived
     );
+  };
+
+  const handleFavorite = (itemID) => {
+    favoriteHandler(itemID, favorites, setFavorites, userToken, token.Email);
   };
 
   return (
     <div>
       <section className="router-div-css py-16 flex flex-col min-h-min bg-zinc-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-extrabold">Explore Our Cards</h2>
+          <h2 className="text-3xl font-extrabold">{pageMessage}</h2>
           <h3 className="text-xl font-bold mt-3">
             Select and press a card for more information about the business.
           </h3>
@@ -67,7 +73,8 @@ export const CustomCard = ({
                   <div className="absolute top-3 right-3">
                     {favorites.includes(card.ItemID) ? (
                       <FaHeart
-                        className="text-stone-600 cursor-pointer text-xl"
+                        alt="favorite heart button - full"
+                        className="text-stone-600 cursor-pointer text-xl hover:text-black"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleFavorite(card.ItemID);
@@ -75,13 +82,24 @@ export const CustomCard = ({
                       />
                     ) : (
                       <FaRegHeart
-                        className="text-stone-600 cursor-pointer text-xl"
+                        alt="favorite heart button - empty"
+                        className="text-stone-600 cursor-pointer text-xl hover:text-black"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleFavorite(card.ItemID);
                         }}
                       />
                     )}
+                  </div>
+                  <div className="absolute top-3 left-3">
+                    <FaTrashAlt
+                      alt="trash can delete button"
+                      className="text-stone-600 cursor-pointer text-xl hover:text-black"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(card.ItemID);
+                      }}
+                    />
                   </div>
                   {index !== expanded && (
                     <p className="text-dark-800">{card.Data.description}</p>

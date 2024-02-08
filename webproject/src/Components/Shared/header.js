@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { DarkMode } from "../DarkMode/DarkMode";
+import personSvg from "./person.svg";
 const navigationList = [
   { to: "/home", label: "Home" },
   { to: "/favorites", label: "Favorites" },
@@ -17,10 +18,11 @@ export const NavBar = (props) => {
   const logOut = () => {
     localStorage.removeItem("USER_TOKEN");
   };
+
   return (
     <>
       <nav className="navbar navbar-expand bd-highlight ">
-        <div className="me-auto p-2 bd-highlight bd-highlight p-font">
+        <div className="ml-5 me-auto p-2 bd-highlight bd-highlight p-font">
           <h1>BIZSPOT</h1>
         </div>
         <div className="p-2 bd-highlight">
@@ -44,15 +46,15 @@ export const NavBar = (props) => {
           <div>
             <button
               type="button"
-              className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              className="relative flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
               onClick={toggleProfileLinks}
             >
               <span className="absolute -inset-1.5"></span>
               <span className="sr-only">Open user menu</span>
               <img
-                className="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt="User Profile"
+                className="h-8 w-8 rounded-full "
+                src={personSvg}
+                alt="User menu Button"
               />
             </button>
           </div>
@@ -61,19 +63,25 @@ export const NavBar = (props) => {
               profileMenuOpen ? "block" : "hidden"
             }`}
           >
-            <a
-              href="/profile"
+            <Link
+              to="/profile"
               className="block px-4 py-2 text-sm text-gray-700"
             >
-              Your Profile
-            </a>
-            <a
+              My Profile
+            </Link>
+            <Link
+              to="/my_cards"
+              className="block px-4 py-2 text-sm text-gray-700"
+            >
+              My Cards
+            </Link>
+            <Link
               onClick={logOut}
-              href="/login"
+              to="/login"
               className="block px-4 py-2 text-sm text-gray-700"
             >
               Sign out
-            </a>
+            </Link>
           </div>
         </div>
         <div className="nav-toggle-css">

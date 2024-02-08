@@ -29,13 +29,17 @@ export const Register = () => {
       registerForm.Name &&
       registerForm.ConfirmPassword
     ) {
-      try {
-        const response = await RegisterUser(registerForm);
-        if (response) {
-          navigate("/login");
+      if (registerForm.Password === registerForm.ConfirmPassword) {
+        try {
+          const response = await RegisterUser(registerForm);
+          if (response) {
+            navigate("/login");
+          }
+        } catch (error) {
+          console.error("Error logging in:", error);
         }
-      } catch (error) {
-        console.error("Error logging in:", error);
+      } else {
+        setMessage("Passwords do not match");
       }
     } else if (
       !registerForm.Email ||
@@ -43,22 +47,26 @@ export const Register = () => {
       !registerForm.Name ||
       !registerForm.ConfirmPassword
     ) {
+      setMessage("Please fill all of the fields");
     }
   };
 
   return (
     <section className="bg-zinc-200 h-screen">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div
+        className={`flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ${
+          isLoading ? "loading" : ""
+        }`}
+      >
         <form
           id="detail"
-          className={`w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-8 ${
-            isLoading ? "loading" : ""
-          }`}
+          className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-8 p-3"
           onSubmit={handleSubmit}
         >
           <h1 className="text-xl pb-3 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
             Create a new account
           </h1>
+          <p className="text-red-600 font-bold mb-2">{message}</p>
           <div className="mb-6">
             <label
               className="block uppercase tracking-wide text-color text-xs font-bold mb-2"

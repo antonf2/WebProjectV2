@@ -43,7 +43,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken) => {
       );
 
       if (itemToDelete) {
-        const deleteResponse = await axios.delete(
+        await axios.delete(
           `${url}/item/${projectId}_${user}/${itemToDelete.ItemID}/`,
           {
             headers: {

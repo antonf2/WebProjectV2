@@ -34,8 +34,7 @@ export const AddCard = async (cardData) => {
         },
       }
     );
-    console.log(response);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error creating card:", error);
     throw error;
