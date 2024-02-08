@@ -3,7 +3,7 @@ import { projectId, token, url } from "../MISC/commonUsage";
 
 export const GetFavoriteCards = async (user) => {
   try {
-    const response = await axios.get(`${url}/item/${projectId}_${user}/`, {
+    const response = await axios.get(`${url}/item/${projectId}_favorites/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -16,14 +16,14 @@ export const GetFavoriteCards = async (user) => {
   }
 };
 
-export const ManageFavoriteCard = async (CardID, user, userToken) => {
+export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
   try {
     if (!userToken) {
       throw new Error("User token not found in localStorage.");
     }
 
     const existingItemsResponse = await axios.get(
-      `${url}/item/${projectId}_${user}/`,
+      `${url}/item/${projectId}_favorites/`,
       {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -44,7 +44,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken) => {
 
       if (itemToDelete) {
         await axios.delete(
-          `${url}/item/${projectId}_${user}/${itemToDelete.ItemID}/`,
+          `${url}/item/${projectId}_favorites/${itemToDelete.ItemID}/`,
           {
             headers: {
               Authorization: `Bearer ${userToken}`,
@@ -57,11 +57,11 @@ export const ManageFavoriteCard = async (CardID, user, userToken) => {
 
     const uploaddata = {
       Scope: "Public",
-      Data: { CardID },
+      Data: favData,
     };
 
     const response = axios.post(
-      `${url}/item/${projectId}_${user}/`,
+      `${url}/item/${projectId}_favorites/`,
       uploaddata,
       {
         headers: {
