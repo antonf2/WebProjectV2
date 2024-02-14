@@ -9,10 +9,7 @@ export const loadCardData = async () => {
   try {
     const response = await GetFavoriteCards(user);
     let favorites = [];
-
-    if (response && response.length > 0) {
-      favorites = response.map((item) => item.Data.CardID);
-    }
+    response.map((item) => (favorites = [...favorites, item.ItemID]));
 
     const { cardDataReceived, loading, error } = await getCards();
 

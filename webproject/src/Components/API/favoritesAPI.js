@@ -8,8 +8,10 @@ export const GetFavoriteCards = async (user) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    return response.data;
+    const existingItemWithSameUser = response.data.find(
+      (item) => item.CreatedBy === user
+    );
+    return existingItemWithSameUser.Data;
   } catch (error) {
     console.error("Error getting favorites:", error);
     throw error;
@@ -32,45 +34,72 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
     );
 
     const existingItems = existingItemsResponse.data;
-
-    const isDuplicate = existingItems.some(
-      (item) => item.Data.CardID === CardID
+    const existingItemWithSameUser = existingItems.find(
+      (item) => item.CreatedBy === user
     );
-
-    if (isDuplicate) {
-      const itemToDelete = existingItems.find(
-        (item) => item.Data.CardID === CardID
+    if (existingItemWithSameUser) {
+      const isDuplicate = existingItemWithSameUser.Data.some(
+        (item) => item.ItemID === CardID
       );
 
-      if (itemToDelete) {
-        await axios.delete(
-          `${url}/item/${projectId}_favorites/${itemToDelete.ItemID}/`,
-          {
-            headers: {
-              Authorization: `Bearer ${userToken}`,
-            },
-          }
+      if (isDuplicate) {
+        const itemToDelete = existingItemWithSameUser.Data.find(
+          (item) => item.ItemID === CardID
         );
+        const newItemsList = existingItemWithSameUser.Data.filter(
+          (item) => item.ItemID !== CardID
+        );
+        const uploadData = {
+          Data: newItemsList,
+        };
+
+        if (itemToDelete) {
+          await axios.put(
+            `${url}/item/${projectId}_favorites/${existingItemWithSameUser.ItemID}/`,
+            uploadData,
+            {
+              headers: {
+                Authorization: `Bearer ${userToken}`,
+              },
+            }
+          );
+        }
+        return;
       }
-      return;
     }
 
-    const uploaddata = {
-      Scope: "Public",
-      Data: favData,
-    };
+    if (existingItemWithSameUser) {
+      const uploadData2 = {
+        Data: [...existingItemWithSameUser.Data, ...favData],
+      };
+      const response = await axios.put(
+        `${url}/item/${projectId}_favorites/${existingItemWithSameUser.ItemID}/`,
+        uploadData2,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      return response.data;
+    } else {
+      const uploadData = {
+        Scope: "Public",
+        Data: favData,
+      };
 
-    const response = axios.post(
-      `${url}/item/${projectId}_favorites/`,
-      uploaddata,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      }
-    );
+      const response = await axios.post(
+        `${url}/item/${projectId}_favorites/`,
+        uploadData,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
 
-    return response.data;
+      return response.data;
+    }
   } catch (error) {
     console.error("Error managing favorite card:", error);
     throw error;

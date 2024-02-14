@@ -38,7 +38,6 @@ export const LoggedInHomePage = () => {
     }
   };
   const [show, setShow] = useState(false);
-  const [showButton, setShowButton] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (

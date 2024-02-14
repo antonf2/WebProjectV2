@@ -10,13 +10,9 @@ export const favoriteHandler = (
   const isFavorite = favorites.includes(itemID);
   const favData = [
     {
-      Email: userEmail,
-      Data: {
-        ItemID: itemID,
-      },
+      ItemID: itemID,
     },
   ];
-  console.log(favData);
 
   setFavorites((prevFavorites) => {
     const newFavorites = isFavorite
@@ -29,7 +25,12 @@ export const favoriteHandler = (
 
 const favoriteToAPI = async (CardID, userToken, userEmail, favData) => {
   try {
-    await ManageFavoriteCard(CardID, userEmail, userToken, favData);
+    const response = await ManageFavoriteCard(
+      CardID,
+      userEmail,
+      userToken,
+      favData
+    );
   } catch (error) {
     console.error("Error adding/removing favorite:", error);
   }
