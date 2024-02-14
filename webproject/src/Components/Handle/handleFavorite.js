@@ -25,12 +25,7 @@ export const favoriteHandler = (
 
 const favoriteToAPI = async (CardID, userToken, userEmail, favData) => {
   try {
-    const response = await ManageFavoriteCard(
-      CardID,
-      userEmail,
-      userToken,
-      favData
-    );
+    await ManageFavoriteCard(CardID, userEmail, userToken, favData);
   } catch (error) {
     console.error("Error adding/removing favorite:", error);
   }
