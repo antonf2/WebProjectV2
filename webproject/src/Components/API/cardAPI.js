@@ -41,20 +41,20 @@ export const AddCard = async (cardData) => {
   }
 };
 
-export const DeleteCard = async (itemId) => {
+export const DeleteCard = async (itemId, userToken) => {
   try {
-    if (!token) {
+    if (!userToken) {
       throw new Error("User token not found in localStorage.");
     }
     const response = axios.delete(
-      `${url}/item//${projectId}_BusinessCard/${itemId}`,
+      `${url}/item/${projectId}_BusinessCard/${itemId}`,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error deleting item:", error);
     throw error;

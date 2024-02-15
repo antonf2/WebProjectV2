@@ -33,13 +33,7 @@ export const CustomCard = ({
   };
 
   const handleDelete = (itemID) => {
-    handleDeleteCard(
-      itemID,
-      favorites,
-      setFavorites,
-      userToken,
-      setCardDataReceived
-    );
+    handleDeleteCard(itemID, userToken, setCardDataReceived, cardDataReceived);
   };
 
   const handleFavorite = (itemID) => {

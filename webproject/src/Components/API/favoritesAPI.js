@@ -8,10 +8,14 @@ export const GetFavoriteCards = async (user) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const existingItemWithSameUser = response.data.find(
-      (item) => item.CreatedBy === user
-    );
-    return existingItemWithSameUser.Data;
+    if (response.data) {
+      const existingItemWithSameUser = response.data.find(
+        (item) => item.CreatedBy === user
+      );
+      if (existingItemWithSameUser) {
+        return existingItemWithSameUser.Data;
+      }
+    }
   } catch (error) {
     console.error("Error getting favorites:", error);
     throw error;
@@ -32,8 +36,11 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
         },
       }
     );
-
+    let dataList = [];
     const existingItems = existingItemsResponse.data;
+    console.log(dataList);
+    console.log(existingItems);
+    console.log(existingItemsResponse);
     const existingItemWithSameUser = existingItems.find(
       (item) => item.CreatedBy === user
     );
@@ -100,6 +107,43 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
 
       return response.data;
     }
+  } catch (error) {
+    console.error("Error managing favorite card:", error);
+    throw error;
+  }
+};
+
+export const DeleteFavoriteForAll = async (cardID, userToken) => {
+  try {
+    if (!userToken) {
+      throw new Error("User token not found in localStorage.");
+    }
+
+    const existingItemsResponse = await axios.get(
+      `${url}/item/${projectId}_favorites/`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      }
+    );
+    const existingItems = existingItemsResponse.data;
+    existingItems.map(async (item) => {
+      const newItemsList = item.Data.filter((item) => item.ItemID !== cardID);
+      const uploadData = {
+        Data: newItemsList,
+      };
+      await axios.put(
+        `${url}/item/${projectId}_favorites/${item.ItemID}/`,
+        uploadData,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+    });
+    return;
   } catch (error) {
     console.error("Error managing favorite card:", error);
     throw error;

@@ -35,11 +35,11 @@
 }
 
 .w-60 {
-    width: 200px;
+    width: 300px;
 }
 
 .selected {
-    width: 400px;
+    width: 500px;
 }
 
 @media (max-width: 700px) {
