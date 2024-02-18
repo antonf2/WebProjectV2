@@ -1,20 +1,6 @@
-import {
-  Button,
-  ButtonGroup,
-  Row,
-  Col,
-  InputGroup,
-  Form,
-  Dropdown,
-} from "@themesberg/react-bootstrap";
+import { Row, Col, InputGroup, Form } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faCog,
-  faCheck,
-  faSearch,
-  faSlidersH,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { token } from "../MISC/commonUsage";
