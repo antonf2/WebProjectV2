@@ -13,6 +13,8 @@ import { ErrorPage } from "./Components/Pages/error";
 import { loadCardData } from "./Components/loaders/loadCardData";
 import { CheckLoggedIn } from "./Components/loaders/checkLoggedIn";
 import { MyCards } from "./Components/Pages/myCards";
+import { UserManagementPage } from "./Components/Pages/userManagement";
+import { loadUserData } from "./Components/loaders/loadUsersData";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +70,12 @@ const router = createBrowserRouter([
         element: <MyCards />,
         errorElement: <ErrorPage />,
         loader: loadCardData,
+      },
+      {
+        path: "/dashboard",
+        element: <UserManagementPage />,
+        errorElement: <ErrorPage />,
+        loader: loadUserData,
       },
     ],
   },

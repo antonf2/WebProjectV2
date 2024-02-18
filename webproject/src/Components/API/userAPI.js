@@ -68,7 +68,7 @@ export const GetUsers = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error getting users:", error);
     throw error;

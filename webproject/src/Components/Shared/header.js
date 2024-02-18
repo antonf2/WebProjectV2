@@ -7,6 +7,7 @@ const navigationList = [
   { to: "/favorites", label: "Favorites" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact Us" },
+  { to: "/dashboard", label: "Management" },
 ];
 
 export const NavBar = (props) => {
