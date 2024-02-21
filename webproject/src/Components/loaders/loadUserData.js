@@ -1,10 +1,10 @@
 import jwtDecode from "jwt-decode";
-import { GetUsers } from "../API/userAPI";
+import { GetUser } from "../API/userAPI";
 
-export const loadUsersData = async () => {
+export const loadUserData = async () => {
   const UserToken = jwtDecode(localStorage.getItem("USER_TOKEN"));
   try {
-    const response = await GetUsers(UserToken);
+    const response = await GetUser(UserToken);
     const data = response.data;
     return data;
   } catch (error) {

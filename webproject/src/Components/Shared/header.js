@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DarkMode } from "../DarkMode/DarkMode";
 import personSvg from "./person.svg";
-const navigationList = [
-  { to: "/home", label: "Home" },
-  { to: "/favorites", label: "Favorites" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact Us" },
-  { to: "/dashboard", label: "Management" },
-];
+import jwtDecode from "jwt-decode";
 
 export const NavBar = (props) => {
+  const [navigationList, setNavigationList] = useState([
+    { to: "/home", label: "Home" },
+    { to: "/favorites", label: "Favorites" },
+    { to: "/about", label: "About" },
+    { to: "/contact", label: "Contact Us" },
+  ]);
+  const userToken = jwtDecode(localStorage.getItem("USER_TOKEN"));
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const toggleProfileLinks = () => {
@@ -19,6 +20,15 @@ export const NavBar = (props) => {
   const logOut = () => {
     localStorage.removeItem("USER_TOKEN");
   };
+
+  useEffect(() => {
+    if (userToken.Role === "Owner") {
+      setNavigationList((prev) => [
+        ...prev,
+        { to: "/dashboard", label: "Management" },
+      ]);
+    }
+  }, []);
 
   return (
     <>

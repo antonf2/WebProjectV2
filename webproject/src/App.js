@@ -8,13 +8,14 @@ import { FavoritesPage } from "./Components/Pages/favorites";
 import { AboutUsPage } from "./Components/Pages/aboutUs";
 import { ContactUsPage } from "./Components/Pages/contactUs";
 import { UserProfilePage } from "./Components/Pages/userProfile";
-import { PrivateRoute } from "./Components/MISC/authentication";
+import { IsOwner, PrivateRoute } from "./Components/MISC/authentication";
 import { ErrorPage } from "./Components/Pages/error";
 import { loadCardData } from "./Components/loaders/loadCardData";
 import { CheckLoggedIn } from "./Components/loaders/checkLoggedIn";
 import { MyCards } from "./Components/Pages/myCards";
 import { UserManagementPage } from "./Components/Pages/userManagement";
-import { loadUserData } from "./Components/loaders/loadUsersData";
+import { loadUsersData } from "./Components/loaders/loadUsersData";
+import { loadUserData } from "./Components/loaders/loadUserData";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <UserProfilePage />,
         errorElement: <ErrorPage />,
+        loader: loadUserData,
       },
       {
         path: "/about",
@@ -72,10 +74,16 @@ const router = createBrowserRouter([
         loader: loadCardData,
       },
       {
-        path: "/dashboard",
-        element: <UserManagementPage />,
+        element: <IsOwner />,
         errorElement: <ErrorPage />,
-        loader: loadUserData,
+        children: [
+          {
+            path: "/dashboard",
+            element: <UserManagementPage />,
+            errorElement: <ErrorPage />,
+            loader: loadUsersData,
+          },
+        ],
       },
     ],
   },

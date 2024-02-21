@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useNavigation } from "react-router-dom";
 import { NavBar } from "../Shared/header";
 import { Footer } from "../Shared/footer";
+import jwtDecode from "jwt-decode";
 
 const Layout = ({ children }) => (
   <div className="flex flex-col min-h-screen">
@@ -24,4 +25,14 @@ export const PrivateRoute = () => {
   ) : (
     <Navigate to="/login" />
   );
+};
+
+export const IsOwner = (element) => {
+  const userToken = localStorage.getItem("USER_TOKEN");
+  const decodedToken = jwtDecode(userToken);
+  if (decodedToken.Role === "Owner") {
+    return <Outlet />;
+  } else {
+    return <Navigate to="/home" />;
+  }
 };

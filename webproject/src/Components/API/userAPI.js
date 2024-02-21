@@ -1,17 +1,24 @@
 import axios from "axios";
 import { projectId, token, url } from "../MISC/commonUsage";
 
-export const GetUser = async (email) => {
-  await axios
-    .get(`${url}/user/object/${projectId}/${email}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => response.data)
-    .catch((error) => {
-      console.error("Error Getting user:", error);
-    });
+export const GetUser = async (UserToken) => {
+  try {
+    if (!token) {
+      throw new Error("User token not found in localStorage.");
+    }
+    const response = await axios.get(
+      `${url}/user/object/${projectId}/${UserToken.Email}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error Getting user:", error);
+    throw error;
+  }
 };
 
 export const DeleteUser = async (email) => {
