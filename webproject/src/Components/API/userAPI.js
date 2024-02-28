@@ -26,7 +26,7 @@ export const DeleteUser = async (email) => {
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
-    const response = axios.delete(`${url}/user/object/${projectId}/${email}`, {
+    const response = axios.delete(`${url}/user/${projectId}/${email}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -38,19 +38,19 @@ export const DeleteUser = async (email) => {
   }
 };
 
-export const EditUser = async (email, password, name, role) => {
+export const EditUser = async (userData) => {
   try {
+    console.log(userData.email);
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
-    const response = axios.put(
-      `${url}/user/object/${projectId}/${email}`,
+    const response = await axios.put(
+      `${url}/user/${projectId}/${userData.email}`,
       {
-        ProjectID: { projectId },
-        Email: email,
-        Password: password,
-        Role: role,
-        Name: name,
+        ProjectID: projectId,
+        Email: userData.email,
+        Role: userData.role,
+        Name: userData.name,
       },
       {
         headers: {

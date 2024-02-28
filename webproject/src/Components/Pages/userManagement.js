@@ -12,6 +12,7 @@ export const UserManagementPage = () => {
 
   useEffect(() => {
     if (token) {
+      console.log(data);
       setUsers(data);
     }
   }, [data]);

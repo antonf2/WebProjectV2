@@ -9,6 +9,6 @@ export const loadUsersData = async () => {
     return data;
   } catch (error) {
     console.error("Error getting users:", error);
-    return error;
+    return Promise.reject(error);
   }
 };
