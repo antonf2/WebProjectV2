@@ -3,17 +3,19 @@ import { FaTrashAlt, FaCog } from "react-icons/fa";
 import { useState } from "react";
 import { EditUserByOwner } from "./editUserByOwner";
 import { DeleteUserByOwner } from "./deleteUserByOwner";
-import { EditUser } from "../API/userAPI";
+import { DeleteUser, EditUser } from "../API/userAPI";
 
 export const UserTable = (users) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const usersList = users;
+  const [usersList, setUsersList] = useState(users.users);
   const [chosenUser, setChosenUser] = useState("");
+  const [userData, setUserData] = useState("");
 
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = (user) => {
     setChosenUser(user);
+    setUserData(user);
     setShowEdit(true);
   };
   const handleChangeEdit = (e) => {
@@ -21,25 +23,42 @@ export const UserTable = (users) => {
   };
   const handleSubmitEdit = async () => {
     try {
-      // console.log(chosenUser);
-      console.log(chosenUser.Email);
-      console.log(chosenUser.Password);
-      console.log(chosenUser.Name);
-      console.log(chosenUser.Role);
       const response = await EditUser({
+        oldEmail: userData.Email,
         email: chosenUser.Email,
         name: chosenUser.Name,
         role: chosenUser.Role,
       });
-      console.log("response:", response);
+      if (response.status === 200) {
+        const updatedUsersList = usersList.map((user) => {
+          if (user === userData) {
+            return chosenUser;
+          }
+          return user;
+        });
+        setUsersList(updatedUsersList);
+      }
+      setShowEdit(false);
     } catch (error) {
       console.error("Error editing user:", error);
     }
   };
   const handleCloseDelete = () => setShowDelete(false);
-  const handleShowDelete = () => setShowDelete(true);
-  const handleSubmitDelete = () => {
-    console.log("hi");
+  const handleShowDelete = (user) => {
+    setChosenUser(user);
+    setShowDelete(true);
+  };
+  const handleSubmitDelete = async () => {
+    try {
+      const response = await DeleteUser(chosenUser.Email);
+      setShowDelete(false);
+      if (response.request.status === 200) {
+        const data = usersList.filter((user) => user !== chosenUser);
+        setUsersList(data);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   return (
@@ -58,7 +77,7 @@ export const UserTable = (users) => {
               </tr>
             </thead>
             <tbody>
-              {usersList.users.map((user) => (
+              {usersList.map((user) => (
                 <tr key={user.Email}>
                   <td>
                     <Card.Link className="d-flex align-items-center">
@@ -85,7 +104,7 @@ export const UserTable = (users) => {
                           className="text-stone-600 cursor-pointer text-xl hover:text-black ml-1"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleShowDelete();
+                            handleShowDelete(user);
                           }}
                         />
                       </div>
@@ -98,8 +117,8 @@ export const UserTable = (users) => {
         </Card.Body>
       </Card>
       <EditUserByOwner
-        userData={chosenUser}
-        setUserData={setChosenUser}
+        oldData={userData}
+        newData={chosenUser}
         show={showEdit}
         handleClose={handleCloseEdit}
         handleChange={handleChangeEdit}

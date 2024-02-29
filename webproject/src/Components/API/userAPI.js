@@ -26,12 +26,15 @@ export const DeleteUser = async (email) => {
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
-    const response = axios.delete(`${url}/user/${projectId}/${email}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
+    const response = await axios.delete(
+      `${url}/user/object/${projectId}/${email}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
   } catch (error) {
     console.error("Error deleting user:", error);
     throw error;
@@ -40,12 +43,11 @@ export const DeleteUser = async (email) => {
 
 export const EditUser = async (userData) => {
   try {
-    console.log(userData.email);
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
     const response = await axios.put(
-      `${url}/user/${projectId}/${userData.email}`,
+      `${url}/user/${projectId}/${userData.oldEmail}`,
       {
         ProjectID: projectId,
         Email: userData.email,
@@ -58,7 +60,7 @@ export const EditUser = async (userData) => {
         },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error editing user:", error);
     throw error;

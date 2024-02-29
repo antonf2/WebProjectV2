@@ -6,7 +6,6 @@ export const EditUserByOwner = ({
   show,
   handleClose,
   handleChange,
-  handleSubmit,
 }) => {
   return (
     <div className="p-5">
@@ -83,14 +82,12 @@ export const EditUserByOwner = ({
           <button
             className="shadow bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
             type="button"
-            onClick={handleClose}
           >
             Cancel
           </button>
           <button
             className="shadow bg-blue-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
             type="button"
-            onClick={handleSubmit}
           >
             Save
           </button>
