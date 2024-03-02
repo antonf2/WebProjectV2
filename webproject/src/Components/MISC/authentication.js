@@ -30,7 +30,7 @@ export const PrivateRoute = () => {
 export const IsOwner = (element) => {
   const userToken = localStorage.getItem("USER_TOKEN");
   const decodedToken = jwtDecode(userToken);
-  if (decodedToken.Role === "Owner") {
+  if (decodedToken.Role === "Admin") {
     return <Outlet />;
   } else {
     return <Navigate to="/home" />;

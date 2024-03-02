@@ -22,7 +22,7 @@ export const NavBar = (props) => {
   };
 
   useEffect(() => {
-    if (userToken.Role === "Owner") {
+    if (userToken.Role === "Admin") {
       setNavigationList((prev) => [
         ...prev,
         { to: "/dashboard", label: "Management" },
