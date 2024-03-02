@@ -1,6 +1,6 @@
 import { Card, Table } from "@themesberg/react-bootstrap";
 import { FaTrashAlt, FaCog } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditUserByOwner } from "./editUserByOwner";
 import { DeleteUserByOwner } from "./deleteUserByOwner";
 import { DeleteUser, EditUser } from "../API/userAPI";
@@ -60,6 +60,10 @@ export const UserTable = (users) => {
       console.error("Error deleting user:", error);
     }
   };
+
+  useEffect(() => {
+    console.log(users.users);
+  }, []);
 
   return (
     <>

@@ -9,7 +9,7 @@ import { AddUserByOwner } from "../MISC/addNewUser";
 import { RegisterUser } from "../API/userAPI";
 
 export const UserManagementPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([useLoaderData()]);
   const data = useLoaderData();
   const [show, setShow] = useState(false);
   const [newUserForm, setNewUserForm] = useState({

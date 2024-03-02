@@ -63,7 +63,7 @@ export const NavBar = (props) => {
               <span className="absolute -inset-1.5"></span>
               <span className="sr-only">Open user menu</span>
               <img
-                className="h-8 w-8 rounded-full "
+                className="bg-zinc-200 h-8 w-8 rounded-full "
                 src={personSvg}
                 alt="User menu Button"
               />
