@@ -1,14 +1,51 @@
+import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
+import EditUserProfile from "../MISC/editUser";
+import { projectId } from "../MISC/commonUsage";
 
 export const UserProfilePage = () => {
-  const data = useLoaderData();
+  const [data, setData] = useState({
+    ProjectID: projectId,
+    Name: "",
+    Email: "",
+    Password: "",
+    ConfirmPassword: "",
+    Role: "Select User Role",
+  });
+  const userData = useLoaderData();
+  const [show, setShow] = useState(false);
 
-  const editProfile = () => {
-    console.log("Hi");
+  useEffect(() => {
+    if (userData) {
+      setData((prevData) => ({
+        ...prevData,
+        Name: userData.Name || prevData.Name,
+        Email: userData.Email || prevData.Email,
+        Role: userData.Role || prevData.Role,
+      }));
+    }
+  }, [userData]);
+
+  const handleEdit = () => {
+    setShow(true);
   };
+
+  const handleChange = (e) => {
+    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+    } catch {}
+  };
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
   return (
     <>
-      <div className="container mx-auto my-8 p-8 ">
+      <div className="text-black container mx-auto my-8 p-8 ">
         <div className="max-w-2xl mx-auto bg-zinc-100 p-8 rounded shadow-md">
           <div className="text-center mb-4">
             <img
@@ -31,7 +68,7 @@ export const UserProfilePage = () => {
           </div>
           <div className="mt-8 text-center">
             <button
-              onClick={editProfile}
+              onClick={handleEdit}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-40"
             >
               Edit Profile
@@ -39,6 +76,15 @@ export const UserProfilePage = () => {
           </div>
         </div>
       </div>
+      {show && (
+        <EditUserProfile
+          data={data}
+          show={show}
+          handleClose={handleClose}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
+      )}
     </>
   );
 };

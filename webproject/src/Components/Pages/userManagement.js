@@ -9,7 +9,7 @@ import { AddUserByOwner } from "../MISC/addNewUser";
 import { RegisterUser } from "../API/userAPI";
 
 export const UserManagementPage = () => {
-  const [users, setUsers] = useState([useLoaderData()]);
+  const [users, setUsers] = useState(useLoaderData());
   const data = useLoaderData();
   const [show, setShow] = useState(false);
   const [newUserForm, setNewUserForm] = useState({
@@ -34,12 +34,14 @@ export const UserManagementPage = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(newUserForm);
     try {
       const response = await RegisterUser(newUserForm);
       console.log(response);
-      if (response === 200) {
+      if (response.success === "post call succeed!") {
+        console.log(users);
+        console.log(response);
         setShow(false);
+        setUsers(users.push(response.data));
       }
     } catch (error) {
       console.error("Error creating user: ", error);
@@ -78,7 +80,7 @@ export const UserManagementPage = () => {
           </Col>
         </Row>
       </div>
-      <UserTable users={data} />
+      <UserTable users={users} />
       <AddUserByOwner
         data={newUserForm}
         show={show}
@@ -86,7 +88,6 @@ export const UserManagementPage = () => {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
-      ;
     </div>
   );
 };

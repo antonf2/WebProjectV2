@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useNavigation } from "react-router-dom";
 import { projectId } from "../MISC/commonUsage";
 import { RegisterUser } from "../API/userAPI";
+import { Dropdown } from "@themesberg/react-bootstrap";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -135,6 +136,48 @@ export const Register = () => {
               value={registerForm.ConfirmPassword}
             />
           </div>
+          <label
+            className="block uppercase tracking-wide text-color text-xs font-bold mb-2"
+            htmlFor="grid-confirm-password"
+          >
+            Role
+          </label>
+          <Dropdown className="mb-2">
+            <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
+              {registerForm.Role}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                name="Role"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value: "Guest",
+                    },
+                  });
+                }}
+              >
+                Guest
+              </Dropdown.Item>
+              <Dropdown.Item
+                name="Role"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value: "Business",
+                    },
+                  });
+                }}
+              >
+                Business
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <div className="flex justify-center">
             <button
               className="bg-zinc-300 text-black hover:bg-zinc-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center"

@@ -61,9 +61,7 @@ export const UserTable = (users) => {
     }
   };
 
-  useEffect(() => {
-    console.log(users.users);
-  }, []);
+  useEffect(() => console.log(users.users), []);
 
   return (
     <>

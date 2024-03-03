@@ -1,7 +1,6 @@
-import { Dropdown, Modal } from "@themesberg/react-bootstrap";
-import { Form } from "@themesberg/react-bootstrap";
+import { Form, Modal } from "@themesberg/react-bootstrap";
 
-export const AddUserByOwner = ({
+const EditUserProfile = ({
   data,
   show,
   handleClose,
@@ -12,7 +11,7 @@ export const AddUserByOwner = ({
     <div className="p-5">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add new User</Modal.Title>
+          <Modal.Title>Edit User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -60,45 +59,6 @@ export const AddUserByOwner = ({
                 autoFocus
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>User Type</Form.Label>
-              <Dropdown>
-                <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
-                  {data.Role}
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    name="Role"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleChange({
-                        target: {
-                          name: e.target.name,
-                          value: "Guest",
-                        },
-                      });
-                    }}
-                  >
-                    Guest
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    name="Role"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleChange({
-                        target: {
-                          name: e.target.name,
-                          value: "Business",
-                        },
-                      });
-                    }}
-                  >
-                    Business
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -114,10 +74,12 @@ export const AddUserByOwner = ({
             type="button"
             onClick={handleSubmit}
           >
-            Create
+            Save
           </button>
         </Modal.Footer>
       </Modal>
     </div>
   );
 };
+
+export default EditUserProfile;

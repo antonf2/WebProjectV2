@@ -112,7 +112,7 @@ export const RegisterUser = async (registerForm) => {
     console.log(registerForm);
     if (registerForm.Password === registerForm.ConfirmPassword) {
       const response = await axios.post(`${url}/user/`, registerForm);
-      return response;
+      return response.data;
     } else alert("Passwords do not match, please try again.");
   } catch (error) {
     console.error("Error registering user:", error);
