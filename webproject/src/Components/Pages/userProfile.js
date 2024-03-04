@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import EditUserProfile from "../MISC/editUser";
 import { projectId } from "../MISC/commonUsage";
+import { EditUser } from "../API/userAPI";
 
 export const UserProfilePage = () => {
   const [data, setData] = useState({
@@ -9,8 +10,8 @@ export const UserProfilePage = () => {
     Name: "",
     Email: "",
     Password: "",
-    ConfirmPassword: "",
-    Role: "Select User Role",
+    Role: "",
+    oldEmail: "",
   });
   const userData = useLoaderData();
   const [show, setShow] = useState(false);
@@ -21,7 +22,8 @@ export const UserProfilePage = () => {
         ...prevData,
         Name: userData.Name || prevData.Name,
         Email: userData.Email || prevData.Email,
-        Role: userData.Role || prevData.Role,
+        Role: userData.Role,
+        oldEmail: userData.Email,
       }));
     }
   }, [userData]);
@@ -36,7 +38,13 @@ export const UserProfilePage = () => {
 
   const handleSubmit = async () => {
     try {
-    } catch {}
+      const response = await EditUser(data);
+      if (response.status === 200) {
+        setShow(false);
+      }
+    } catch (error) {
+      console.error("Error Editing User: ", error);
+    }
   };
 
   const handleClose = () => {
@@ -63,7 +71,7 @@ export const UserProfilePage = () => {
                 Contact Information
               </h3>
               <p>Email: {data.Email}</p>
-              <p>Password: {data.Password}</p>
+              <p>Password: ********</p>
             </div>
           </div>
           <div className="mt-8 text-center">

@@ -25,9 +25,10 @@ export const UserTable = (users) => {
     try {
       const response = await EditUser({
         oldEmail: userData.Email,
-        email: chosenUser.Email,
-        name: chosenUser.Name,
-        role: chosenUser.Role,
+        Email: chosenUser.Email,
+        Name: chosenUser.Name,
+        Role: chosenUser.Role,
+        Password: chosenUser.Password,
       });
       if (response.status === 200) {
         const updatedUsersList = usersList.map((user) => {
@@ -61,8 +62,9 @@ export const UserTable = (users) => {
     }
   };
 
-  useEffect(() => console.log(users.users), []);
-
+  useEffect(() => {
+    setUsersList(users.users);
+  }, [users]);
   return (
     <>
       <Card
@@ -91,7 +93,7 @@ export const UserTable = (users) => {
                   <td>{user.Email}</td>
                   <td className="grid grid-cols-2">
                     {user.Role}
-                    {user.Role !== "Owner" && (
+                    {user.Role !== "Admin" && (
                       <div className="grid grid-cols-2">
                         <FaCog
                           alt="gear edit button"

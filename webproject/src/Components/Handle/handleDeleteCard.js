@@ -10,7 +10,6 @@ export const handleDeleteCard = async (
   try {
     await DeleteFavoriteForAll(itemID, userToken);
     const response = await DeleteCard(itemID, userToken);
-    console.log(response);
     if (response.status === 200) {
       const cardData = cardDataReceived.filter(
         (item) => item.ItemID !== itemID

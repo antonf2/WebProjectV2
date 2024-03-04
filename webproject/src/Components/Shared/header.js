@@ -80,12 +80,15 @@ export const NavBar = (props) => {
             >
               My Profile
             </Link>
-            <Link
-              to="/my_cards"
-              className="block px-4 py-2 text-sm text-gray-700"
-            >
-              My Cards
-            </Link>
+
+            {userToken.Role !== "Guest" && (
+              <Link
+                to="/my_cards"
+                className="block px-4 py-2 text-sm text-gray-700"
+              >
+                My Cards
+              </Link>
+            )}
             <Link
               onClick={logOut}
               to="/login"

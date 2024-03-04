@@ -12,7 +12,7 @@ export const MyCards = () => {
 
   useEffect(() => {
     if (data) {
-      setMyCards(FilterMyCards(data.cardDataReceived, UserToken));
+      setMyCards(FilterMyCards(data.cardDataReceived, UserToken.Email));
     }
   }, [data]);
   return (

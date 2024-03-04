@@ -36,11 +36,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
         },
       }
     );
-    let dataList = [];
     const existingItems = existingItemsResponse.data;
-    console.log(dataList);
-    console.log(existingItems);
-    console.log(existingItemsResponse);
     const existingItemWithSameUser = existingItems.find(
       (item) => item.CreatedBy === user
     );

@@ -9,8 +9,10 @@ import { AddUserByOwner } from "../MISC/addNewUser";
 import { RegisterUser } from "../API/userAPI";
 
 export const UserManagementPage = () => {
-  const [users, setUsers] = useState(useLoaderData());
   const data = useLoaderData();
+  const [filteredUsers, setFilteredUsers] = useState(data);
+  const [users, setUsers] = useState(data);
+  const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState(false);
   const [newUserForm, setNewUserForm] = useState({
     ProjectID: projectId,
@@ -20,6 +22,10 @@ export const UserManagementPage = () => {
     ConfirmPassword: "",
     Role: "Select User Role",
   });
+
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+  };
 
   const handleChange = (e) => {
     setNewUserForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,10 +42,7 @@ export const UserManagementPage = () => {
   const handleSubmit = async () => {
     try {
       const response = await RegisterUser(newUserForm);
-      console.log(response);
       if (response.success === "post call succeed!") {
-        console.log(users);
-        console.log(response);
         setShow(false);
         setUsers(users.push(response.data));
       }
@@ -50,10 +53,14 @@ export const UserManagementPage = () => {
 
   useEffect(() => {
     if (token) {
-      console.log(data);
-      setUsers(data);
+      const filteredUsers = searchValue
+        ? data.filter((user) =>
+            user.Name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : data;
+      setFilteredUsers(filteredUsers);
     }
-  }, [data]);
+  }, [data, searchValue]);
 
   return (
     <div className="container bg-zinc-">
@@ -75,12 +82,17 @@ export const UserManagementPage = () => {
               <InputGroup.Text>
                 <FontAwesomeIcon icon={faSearch} />
               </InputGroup.Text>
-              <Form.Control type="text" placeholder="Search" />
+              <Form.Control
+                type="text"
+                placeholder="Search"
+                value={searchValue}
+                onChange={handleSearchChange}
+              />
             </InputGroup>
           </Col>
         </Row>
       </div>
-      <UserTable users={users} />
+      <UserTable users={filteredUsers} />
       <AddUserByOwner
         data={newUserForm}
         show={show}

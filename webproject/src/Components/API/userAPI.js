@@ -43,6 +43,7 @@ export const DeleteUser = async (email) => {
 
 export const EditUser = async (userData) => {
   try {
+    console.log(userData.Password);
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
@@ -50,9 +51,10 @@ export const EditUser = async (userData) => {
       `${url}/user/${projectId}/${userData.oldEmail}`,
       {
         ProjectID: projectId,
-        Email: userData.email,
-        Role: userData.role,
-        Name: userData.name,
+        Email: userData.Email,
+        Role: userData.Role,
+        Name: userData.Name,
+        ...(userData.Password ? { Password: userData.Password } : {}),
       },
       {
         headers: {
@@ -60,6 +62,7 @@ export const EditUser = async (userData) => {
         },
       }
     );
+    console.log(response);
     return response;
   } catch (error) {
     console.error("Error editing user:", error);
@@ -109,7 +112,6 @@ export const LoginUser = async (loginForm) => {
 
 export const RegisterUser = async (registerForm) => {
   try {
-    console.log(registerForm);
     if (registerForm.Password === registerForm.ConfirmPassword) {
       const response = await axios.post(`${url}/user/`, registerForm);
       return response.data;

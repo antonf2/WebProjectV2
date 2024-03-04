@@ -22,8 +22,8 @@ export const AddCard = async (cardData) => {
     Data: cardData,
   };
   try {
-    if (!token) {
-      throw new Error(`User token not found in localStorage.token:${token}`);
+    if (!userToken) {
+      throw new Error(`User token not found in localStorage`);
     }
     const response = axios.post(
       `${url}/item/${projectId}_BusinessCard`,
@@ -61,21 +61,17 @@ export const DeleteCard = async (itemId, userToken) => {
   }
 };
 
-export const EditCard = async (cardData) => {
-  var cardDataWithUser = {
-    ...cardData,
-    createdBy: userToken ? userToken.Email : null,
-  };
+export const EditCard = async (cardData, itemID) => {
   var uploaddata = {
     Scope: "Public",
-    Data: cardDataWithUser,
+    Data: cardData,
   };
   try {
     if (!token) {
       throw new Error("User token not found in localStorage.");
     }
-    const response = axios.put(
-      `${url}/item/${projectId}_BusinessCard`,
+    const response = await axios.put(
+      `${url}/item/${projectId}_BusinessCard/${itemID}/`,
       uploaddata,
       {
         headers: {
@@ -83,7 +79,7 @@ export const EditCard = async (cardData) => {
         },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error editing card:", error);
     throw error;

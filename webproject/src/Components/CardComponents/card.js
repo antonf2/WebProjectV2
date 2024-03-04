@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-import { FaHeart, FaTrashAlt } from "react-icons/fa";
+import { FaCog, FaHeart, FaTrashAlt } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { favoriteHandler } from "../Handle/handleFavorite";
 import { handleDeleteCard } from "../Handle/handleDeleteCard";
+import jwtDecode from "jwt-decode";
+import { Form, InputGroup } from "@themesberg/react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export const CustomCard = ({
+  show,
   token,
   dataFavorites,
   dataCardDataReceived,
@@ -18,15 +23,29 @@ export const CustomCard = ({
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const userToken = localStorage.getItem("USER_TOKEN");
+  const decode = jwtDecode(userToken);
+  const [searchValue, setSearchValue] = useState("");
+  const [originalCardData, setOriginalCardData] = useState([]);
 
   useEffect(() => {
     if (token) {
       setFavorites(dataFavorites);
       setCardDataReceived(dataCardDataReceived);
+      setOriginalCardData(dataCardDataReceived);
       setIsLoading(dataLoading);
       setError(dataError);
     }
   }, [token, dataFavorites, dataCardDataReceived, dataLoading, dataError]);
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const filteredCards = originalCardData.filter((card) =>
+      card.Data.title.toLowerCase().includes(searchTerm)
+    );
+
+    setSearchValue(e.target.value);
+    setCardDataReceived(searchTerm ? filteredCards : originalCardData);
+  };
 
   const handleClick = (index) => {
     setExpanded(index === expanded ? null : index);
@@ -48,6 +67,17 @@ export const CustomCard = ({
           <h3 className="text-xl font-bold mt-3">
             Select and press a card for more information about the business.
           </h3>
+          <InputGroup className="container me-2 me-lg-3">
+            <InputGroup.Text>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Search"
+              value={searchValue}
+              onChange={handleSearchChange}
+            />
+          </InputGroup>
         </div>
         <div className="mt-16 flex flex-wrap justify-center gap-5 items-center">
           {isLoading ? (
@@ -85,16 +115,26 @@ export const CustomCard = ({
                       />
                     )}
                   </div>
-                  <div className="absolute top-3 left-3">
-                    <FaTrashAlt
-                      alt="trash can delete button"
-                      className="text-stone-600 cursor-pointer text-xl hover:text-black"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(card.ItemID);
-                      }}
-                    />
-                  </div>
+                  {card.CreatedBy === decode.Email && (
+                    <div className="absolute top-3 left-3 grid, grid grid-cols-2">
+                      <FaTrashAlt
+                        alt="trash can delete button"
+                        className="text-stone-600 cursor-pointer text-xl hover:text-black"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(card.ItemID);
+                        }}
+                      />
+                      <FaCog
+                        alt="gear edit button"
+                        className="text-stone-600 cursor-pointer text-xl hover:text-black mr-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          show(card);
+                        }}
+                      />
+                    </div>
+                  )}
                   {index !== expanded && (
                     <p className="text-dark-800">{card.Data.description}</p>
                   )}

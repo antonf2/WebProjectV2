@@ -48,17 +48,6 @@ const EditUserProfile = ({
                 autoFocus
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                name="ConfirmPassword"
-                value={data.ConfirmPassword}
-                onChange={handleChange}
-                type="password"
-                placeholder="*****"
-                autoFocus
-              />
-            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
