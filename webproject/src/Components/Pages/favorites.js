@@ -25,6 +25,7 @@ export const FavoritesPage = () => {
         dataLoading={data.loading}
         dataError={data.error}
         pageMessage={message}
+        isFavoritesPage={true}
       />
     </div>
   );

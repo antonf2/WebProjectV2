@@ -57,7 +57,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
         };
 
         if (itemToDelete) {
-          await axios.put(
+          const response = await axios.put(
             `${url}/item/${projectId}_favorites/${existingItemWithSameUser.ItemID}/`,
             uploadData,
             {
@@ -66,6 +66,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
               },
             }
           );
+          return response;
         }
         return;
       }
@@ -84,7 +85,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
           },
         }
       );
-      return response.data;
+      return response;
     } else {
       const uploadData = {
         Scope: "Public",
@@ -101,7 +102,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
         }
       );
 
-      return response.data;
+      return response;
     }
   } catch (error) {
     console.error("Error managing favorite card:", error);

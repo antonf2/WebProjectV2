@@ -5,7 +5,10 @@ export const favoriteHandler = (
   favorites,
   setFavorites,
   userToken,
-  userEmail
+  userEmail,
+  isFavoritesPage,
+  cardDataReceived,
+  setCardDataReceived
 ) => {
   const isFavorite = favorites.includes(itemID);
   const favData = [
@@ -18,14 +21,46 @@ export const favoriteHandler = (
     const newFavorites = isFavorite
       ? prevFavorites.filter((id) => id !== itemID)
       : [...prevFavorites, itemID];
-    favoriteToAPI(itemID, userToken, userEmail, favData);
+    favoriteToAPI(
+      itemID,
+      userToken,
+      userEmail,
+      favData,
+      isFavoritesPage,
+      cardDataReceived,
+      setCardDataReceived
+    );
     return newFavorites;
   });
 };
 
-const favoriteToAPI = async (CardID, userToken, userEmail, favData) => {
+const favoriteToAPI = async (
+  CardID,
+  userToken,
+  userEmail,
+  favData,
+  isFavoritesPage,
+  cardDataReceived,
+  setCardDataReceived
+) => {
+  console.log(CardID);
+  console.log(favData);
+  console.log(isFavoritesPage);
+  console.log(cardDataReceived);
   try {
-    await ManageFavoriteCard(CardID, userEmail, userToken, favData);
+    const response = await ManageFavoriteCard(
+      CardID,
+      userEmail,
+      userToken,
+      favData
+    );
+    console.log(response);
+    if (response.status === 200 && isFavoritesPage === true) {
+      const removeCard = cardDataReceived.filter(
+        (card) => card.ItemID !== CardID
+      );
+      setCardDataReceived(removeCard);
+    }
   } catch (error) {
     console.error("Error adding/removing favorite:", error);
   }

@@ -10,6 +10,8 @@ import jwtDecode from "jwt-decode";
 import { EditCardModal } from "../CardComponents/editCardModal";
 import { handleDeleteCard } from "../Handle/handleDeleteCard";
 import { EditCard } from "../API/cardAPI";
+import { handleExpandClick } from "../Handle/handleExpandClick";
+import { handleCardSearchChange } from "../Handle/handleSearchChange";
 
 export const CustomCard = ({
   token,
@@ -18,6 +20,7 @@ export const CustomCard = ({
   dataLoading,
   dataError,
   pageMessage,
+  isFavoritesPage,
 }) => {
   const [cardDataReceived, setCardDataReceived] = useState(null);
   const [expanded, setExpanded] = useState(null);
@@ -42,20 +45,6 @@ export const CustomCard = ({
     }
   }, [token, dataFavorites, dataCardDataReceived, dataLoading, dataError]);
 
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filteredCards = originalCardData.filter((card) =>
-      card.Data.title.toLowerCase().includes(searchTerm)
-    );
-
-    setSearchValue(e.target.value);
-    setCardDataReceived(searchTerm ? filteredCards : originalCardData);
-  };
-
-  const handleClick = (index) => {
-    setExpanded(index === expanded ? null : index);
-  };
-
   const handleDelete = (itemID) => {
     setSelectedItem(itemID);
     setShowDelete(true);
@@ -79,7 +68,16 @@ export const CustomCard = ({
   };
 
   const handleFavorite = (itemID) => {
-    favoriteHandler(itemID, favorites, setFavorites, userToken, token.Email);
+    favoriteHandler(
+      itemID,
+      favorites,
+      setFavorites,
+      userToken,
+      token.Email,
+      isFavoritesPage,
+      cardDataReceived,
+      setCardDataReceived
+    );
   };
 
   const handleOpenEdit = (itemID) => {
@@ -157,7 +155,14 @@ export const CustomCard = ({
               type="text"
               placeholder="Search"
               value={searchValue}
-              onChange={handleSearchChange}
+              onChange={(e) =>
+                handleCardSearchChange(
+                  e,
+                  setSearchValue,
+                  setCardDataReceived,
+                  originalCardData
+                )
+              }
             />
           </InputGroup>
         </div>
@@ -173,7 +178,7 @@ export const CustomCard = ({
                 className={`mb-4 card h-96 bg-cover bg-center ${
                   index === expanded ? "selected" : "w-60"
                 }`}
-                onClick={() => handleClick(index)}
+                onClick={() => handleExpandClick(index, expanded, setExpanded)}
               >
                 <div className="card-content flex flex-col text-center pb-4 font-normal p-2 relative">
                   <div className="absolute top-3 right-3">
