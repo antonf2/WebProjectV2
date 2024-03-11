@@ -22,6 +22,12 @@ export const NavBar = (props) => {
   };
 
   useEffect(() => {
+    if (userToken.Role !== "Guest") {
+      setNavigationList((prev) => [
+        ...prev,
+        { to: "/my_cards", label: "My Cards" },
+      ]);
+    }
     if (userToken.Role === "Admin") {
       setNavigationList((prev) => [
         ...prev,
@@ -80,15 +86,6 @@ export const NavBar = (props) => {
             >
               My Profile
             </Link>
-
-            {userToken.Role !== "Guest" && (
-              <Link
-                to="/my_cards"
-                className="block px-4 py-2 text-sm text-gray-700"
-              >
-                My Cards
-              </Link>
-            )}
             <Link
               onClick={logOut}
               to="/login"

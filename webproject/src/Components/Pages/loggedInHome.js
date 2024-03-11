@@ -12,7 +12,9 @@ export const LoggedInHomePage = () => {
   const data = useLoaderData();
   const [newData, setNewData] = useState(data.cardDataReceived);
   const [showButton, setShowButton] = useState(false);
-  const [itemID, setItemID] = useState("");
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const [cardData, setCardData] = useState({
     title: "",
     description: "",
@@ -32,51 +34,11 @@ export const LoggedInHomePage = () => {
     }
   }, [UserToken]);
 
-  const handleOpenEdit = (card) => {
-    setItemID(card.ItemID);
-    setCardData((prevData) => ({
-      ...prevData,
-      email: card.Data.email || prevData.email,
-      phone: card.Data.phone || prevData.phone,
-      services: card.Data.services || prevData.services,
-      title: card.Data.title || prevData.title,
-      description: card.Data.description || prevData.description,
-      address: card.Data.address || prevData.address,
-      clientele: card.Data.clientele || prevData.clientele,
-      createdBy: card.CreatedBy,
-    }));
-    setShowEdit(true);
-  };
-
-  const handleCloseEdit = () => {
-    setShowEdit(false);
-  };
-
   const handleChange = (e) => {
     setCardData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-  };
-
-  const handleSubmitEdit = async (e) => {
-    try {
-      const response = await EditCard(cardData, itemID);
-      if (response.status === 200) {
-        setNewData((prev) => {
-          const updatedCard = prev.map((card) => {
-            if (card.ItemID === itemID) {
-              setShowEdit(false);
-              return { ...card, Data: cardData };
-            }
-            return card;
-          });
-          return updatedCard;
-        });
-      }
-    } catch (error) {
-      console.error("Error editing user: ", error);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -90,14 +52,10 @@ export const LoggedInHomePage = () => {
       console.error("Error Creating Card:", error);
     }
   };
-  const [show, setShow] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
   return (
     <div className="bg-zinc-200 min-h-fit mb-16 router-div-css text-center ">
       <CustomCard
-        show={handleOpenEdit}
         token={UserToken}
         dataFavorites={data.favorites}
         dataCardDataReceived={newData}
@@ -120,13 +78,6 @@ export const LoggedInHomePage = () => {
         handleClose={handleClose}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-      />
-      <EditCardModal
-        show={showEdit}
-        cardData={cardData}
-        handleClose={handleCloseEdit}
-        handleChange={handleChange}
-        handleSubmit={handleSubmitEdit}
       />
     </div>
   );

@@ -8,13 +8,14 @@ export const FavoritesPage = () => {
   const message = "My Favorites";
   const UserToken = jwtDecode(localStorage.getItem("USER_TOKEN"));
   const data = useLoaderData();
-  const [myFavorites, setMyFavorites] = useState([]);
+  const [myFavorites, setMyFavorites] = useState(data.cardDataReceived);
 
   useEffect(() => {
     if (data) {
       setMyFavorites(FilterFavorites(data.favorites, data.cardDataReceived));
     }
   }, [data]);
+
   return (
     <div className="text-center">
       <CustomCard

@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
-import { FaCog, FaHeart, FaTrashAlt } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
-import { favoriteHandler } from "../Handle/handleFavorite";
-import { handleDeleteCard } from "../Handle/handleDeleteCard";
-import jwtDecode from "jwt-decode";
+import React, { useState, useEffect } from "react";
 import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { DeleteCardModal } from "./deleteCardModal";
+import { FaCog, FaHeart, FaTrashAlt } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+import { favoriteHandler } from "../Handle/handleFavorite";
+import jwtDecode from "jwt-decode";
+import { EditCardModal } from "../CardComponents/editCardModal";
+import { handleDeleteCard } from "../Handle/handleDeleteCard";
+import { EditCard } from "../API/cardAPI";
 
 export const CustomCard = ({
-  show,
   token,
   dataFavorites,
   dataCardDataReceived,
@@ -26,6 +28,9 @@ export const CustomCard = ({
   const decode = jwtDecode(userToken);
   const [searchValue, setSearchValue] = useState("");
   const [originalCardData, setOriginalCardData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -52,12 +57,89 @@ export const CustomCard = ({
   };
 
   const handleDelete = (itemID) => {
-    handleDeleteCard(itemID, userToken, setCardDataReceived, cardDataReceived);
+    setSelectedItem(itemID);
+    setShowDelete(true);
+  };
+
+  const handleConfirmDelete = () => {
+    handleDeleteCard(
+      selectedItem,
+      userToken,
+      setCardDataReceived,
+      cardDataReceived
+    );
+
+    setShowDelete(false);
+    setSelectedItem(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDelete(false);
+    setSelectedItem(null);
   };
 
   const handleFavorite = (itemID) => {
     favoriteHandler(itemID, favorites, setFavorites, userToken, token.Email);
   };
+
+  const handleOpenEdit = (itemID) => {
+    const card = cardDataReceived.find((card) => card.ItemID === itemID);
+    setShowEdit(true);
+    setSelectedItem(itemID);
+    setCardData({
+      title: card.Data.title,
+      description: card.Data.description,
+      services: card.Data.services,
+      clientele: card.Data.clientele,
+      email: card.Data.email,
+      phone: card.Data.phone,
+      address: card.Data.address,
+      createdBy: card.CreatedBy,
+    });
+  };
+
+  const handleCloseEdit = () => {
+    setShowEdit(false);
+  };
+
+  const handleChangeEdit = (e) => {
+    setCardData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await EditCard(cardData, selectedItem);
+      if (response.status === 200) {
+        setCardDataReceived((prev) => {
+          const updatedCard = prev.map((card) => {
+            if (card.ItemID === selectedItem) {
+              setShowEdit(false);
+              return { ...card, Data: cardData };
+            }
+            return card;
+          });
+          return updatedCard;
+        });
+      }
+    } catch (error) {
+      console.error("Error editing user: ", error);
+    }
+  };
+
+  const [cardData, setCardData] = useState({
+    title: "",
+    description: "",
+    services: "",
+    clientele: "",
+    email: "",
+    phone: "",
+    address: "",
+    createdBy: "",
+  });
 
   return (
     <div>
@@ -130,7 +212,7 @@ export const CustomCard = ({
                         className="text-stone-600 cursor-pointer text-xl hover:text-black mr-1"
                         onClick={(e) => {
                           e.stopPropagation();
-                          show(card);
+                          handleOpenEdit(card.ItemID);
                         }}
                       />
                     </div>
@@ -159,6 +241,20 @@ export const CustomCard = ({
           )}
         </div>
       </section>
+      <EditCardModal
+        show={showEdit}
+        cardData={cardData}
+        handleClose={handleCloseEdit}
+        handleChange={handleChangeEdit}
+        handleSubmit={handleSubmitEdit}
+      />
+      <DeleteCardModal
+        show={showDelete}
+        handleClose={handleCancelDelete}
+        handleSubmit={handleConfirmDelete}
+      />
     </div>
   );
 };
+
+export default CustomCard;

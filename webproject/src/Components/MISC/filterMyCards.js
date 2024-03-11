@@ -1,7 +1,7 @@
 export const FilterMyCards = (cardData, userToken) => {
   const myCards = [];
   cardData.map((card) => {
-    if (card.CreatedBy === userToken.Email) {
+    if (card.CreatedBy === userToken) {
       myCards.push(card);
       return myCards;
     }
