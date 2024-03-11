@@ -43,10 +43,6 @@ const favoriteToAPI = async (
   cardDataReceived,
   setCardDataReceived
 ) => {
-  console.log(CardID);
-  console.log(favData);
-  console.log(isFavoritesPage);
-  console.log(cardDataReceived);
   try {
     const response = await ManageFavoriteCard(
       CardID,
@@ -54,7 +50,6 @@ const favoriteToAPI = async (
       userToken,
       favData
     );
-    console.log(response);
     if (response.status === 200 && isFavoritesPage === true) {
       const removeCard = cardDataReceived.filter(
         (card) => card.ItemID !== CardID
