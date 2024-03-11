@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 import { CustomCard } from "../CardComponents/card";
-import { AddCard, EditCard } from "../API/cardAPI";
+import { AddCard } from "../API/cardAPI";
 import { useLoaderData } from "react-router-dom";
 import { CardModal } from "../CardComponents/cardModal";
-import { EditCardModal } from "../CardComponents/editCardModal";
 
 export const LoggedInHomePage = () => {
   const message = "Explore Our Cards";
