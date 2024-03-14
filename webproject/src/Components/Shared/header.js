@@ -19,6 +19,7 @@ export const NavBar = (props) => {
   };
   const logOut = () => {
     localStorage.removeItem("USER_TOKEN");
+    window.location.reload();
   };
 
   useEffect(() => {

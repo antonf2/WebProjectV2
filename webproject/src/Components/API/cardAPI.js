@@ -5,7 +5,7 @@ export const GetCards = async () => {
   try {
     const response = await axios.get(`${url}/item/${projectId}_BusinessCard`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
       },
     });
 
@@ -30,7 +30,7 @@ export const AddCard = async (cardData) => {
       uploaddata,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
         },
       }
     );
@@ -75,7 +75,7 @@ export const EditCard = async (cardData, itemID) => {
       uploaddata,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
         },
       }
     );
@@ -95,7 +95,7 @@ export const GetCard = (itemId) => {
       `${url}/item/${projectId}_BusinessCard/${itemId}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
         },
       }
     );
