@@ -1,5 +1,5 @@
 import axios from "axios";
-import { projectId, token, url, userToken } from "../MISC/commonUsage";
+import { projectId, url } from "../MISC/commonUsage";
 
 export const GetCards = async () => {
   try {
@@ -17,12 +17,13 @@ export const GetCards = async () => {
 };
 
 export const AddCard = async (cardData) => {
+  const token = localStorage.getItem("USER_TOKEN");
   var uploaddata = {
     Scope: "Public",
     Data: cardData,
   };
   try {
-    if (!userToken) {
+    if (!token) {
       throw new Error(`User token not found in localStorage`);
     }
     const response = axios.post(
@@ -30,7 +31,7 @@ export const AddCard = async (cardData) => {
       uploaddata,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -62,6 +63,7 @@ export const DeleteCard = async (itemId, userToken) => {
 };
 
 export const EditCard = async (cardData, itemID) => {
+  const token = localStorage.getItem("USER_TOKEN");
   var uploaddata = {
     Scope: "Public",
     Data: cardData,
@@ -75,7 +77,7 @@ export const EditCard = async (cardData, itemID) => {
       uploaddata,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -87,6 +89,7 @@ export const EditCard = async (cardData, itemID) => {
 };
 
 export const GetCard = (itemId) => {
+  const token = localStorage.getItem("USER_TOKEN");
   try {
     if (!token) {
       throw new Error("User token not found in localStorage.");
@@ -95,7 +98,7 @@ export const GetCard = (itemId) => {
       `${url}/item/${projectId}_BusinessCard/${itemId}`,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("USER_TOKEN")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
