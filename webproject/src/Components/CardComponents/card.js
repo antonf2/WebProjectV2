@@ -22,28 +22,40 @@ export const CustomCard = ({
   pageMessage,
   isFavoritesPage,
 }) => {
-  const [cardDataReceived, setCardDataReceived] = useState(null);
-  const [expanded, setExpanded] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [favorites, setFavorites] = useState(null);
   const userToken = localStorage.getItem("USER_TOKEN");
   const decode = jwtDecode(userToken);
+  const [cardDataReceived, setCardDataReceived] =
+    useState(dataCardDataReceived);
+  const [expanded, setExpanded] = useState(null);
+  const [originalCardData, setOriginalCardData] =
+    useState(dataCardDataReceived);
+  const [isLoading, setIsLoading] = useState(dataLoading);
+  const [error, setError] = useState(dataError);
+  const [favorites, setFavorites] = useState(dataFavorites);
   const [searchValue, setSearchValue] = useState("");
-  const [originalCardData, setOriginalCardData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [cardData, setCardData] = useState({
+    title: "",
+    description: "",
+    services: "",
+    clientele: "",
+    email: "",
+    phone: "",
+    address: "",
+    createdBy: "",
+  });
 
   useEffect(() => {
-    if (token) {
+    if (token && dataCardDataReceived) {
       setFavorites(dataFavorites);
       setCardDataReceived(dataCardDataReceived);
       setOriginalCardData(dataCardDataReceived);
       setIsLoading(dataLoading);
       setError(dataError);
     }
-  }, [token, dataFavorites, dataCardDataReceived, dataLoading, dataError]);
+  }, [dataCardDataReceived]);
 
   const handleDelete = (itemID) => {
     setSelectedItem(itemID);
@@ -127,17 +139,6 @@ export const CustomCard = ({
       console.error("Error editing user: ", error);
     }
   };
-
-  const [cardData, setCardData] = useState({
-    title: "",
-    description: "",
-    services: "",
-    clientele: "",
-    email: "",
-    phone: "",
-    address: "",
-    createdBy: "",
-  });
 
   return (
     <div>

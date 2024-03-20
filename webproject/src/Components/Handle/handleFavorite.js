@@ -1,6 +1,6 @@
 import { ManageFavoriteCard } from "../API/favoritesAPI";
 
-export const favoriteHandler = (
+export const favoriteHandler = async (
   itemID,
   favorites,
   setFavorites,
@@ -8,7 +8,8 @@ export const favoriteHandler = (
   userEmail,
   isFavoritesPage,
   cardDataReceived,
-  setCardDataReceived
+  setCardDataReceived,
+  setLoading
 ) => {
   const isFavorite = favorites.includes(itemID);
   const favData = [
@@ -16,22 +17,27 @@ export const favoriteHandler = (
       ItemID: itemID,
     },
   ];
-
-  setFavorites((prevFavorites) => {
-    const newFavorites = isFavorite
-      ? prevFavorites.filter((id) => id !== itemID)
-      : [...prevFavorites, itemID];
-    favoriteToAPI(
-      itemID,
-      userToken,
-      userEmail,
-      favData,
-      isFavoritesPage,
-      cardDataReceived,
-      setCardDataReceived
-    );
-    return newFavorites;
-  });
+  try {
+    setFavorites((prevFavorites) => {
+      const newFavorites = isFavorite
+        ? prevFavorites.filter((id) => id !== itemID)
+        : [...prevFavorites, itemID];
+      favoriteToAPI(
+        itemID,
+        userToken,
+        userEmail,
+        favData,
+        isFavoritesPage,
+        cardDataReceived,
+        setCardDataReceived
+      );
+      return newFavorites;
+    });
+  } catch (error) {
+    console.error("Error adding/removing favorite:", error);
+  } finally {
+    setLoading(false);
+  }
 };
 
 const favoriteToAPI = async (
