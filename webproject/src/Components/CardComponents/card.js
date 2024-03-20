@@ -203,7 +203,8 @@ export const CustomCard = ({
                       />
                     )}
                   </div>
-                  {card.CreatedBy === decode.Email && (
+                  {(card.CreatedBy === decode.Email ||
+                    decode.Role === "Admin") && (
                     <div className="absolute top-3 left-3 grid, grid grid-cols-2">
                       <FaTrashAlt
                         alt="trash can delete button"
