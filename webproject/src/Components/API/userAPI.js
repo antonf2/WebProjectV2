@@ -1,7 +1,8 @@
 import axios from "axios";
-import { projectId, token, url } from "../MISC/commonUsage";
+import { projectId, url } from "../MISC/commonUsage";
 
 export const GetUser = async (UserToken) => {
+  const token = localStorage.getItem("USER_TOKEN");
   try {
     if (!token) {
       throw new Error("User token not found in localStorage.");
@@ -22,6 +23,7 @@ export const GetUser = async (UserToken) => {
 };
 
 export const DeleteUser = async (email) => {
+  const token = localStorage.getItem("USER_TOKEN");
   try {
     if (!token) {
       throw new Error("User token not found in localStorage.");
@@ -42,6 +44,7 @@ export const DeleteUser = async (email) => {
 };
 
 export const EditUser = async (userData) => {
+  const token = localStorage.getItem("USER_TOKEN");
   try {
     console.log(userData.Password);
     if (!token) {
@@ -71,6 +74,7 @@ export const EditUser = async (userData) => {
 };
 
 export const GetUsers = async () => {
+  const token = localStorage.getItem("USER_TOKEN");
   try {
     if (!token) {
       throw new Error("User token not found in localStorage.");
