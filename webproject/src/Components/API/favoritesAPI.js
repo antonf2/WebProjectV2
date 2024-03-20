@@ -1,7 +1,8 @@
 import axios from "axios";
-import { projectId, token, url } from "../MISC/commonUsage";
+import { projectId, url } from "../MISC/commonUsage";
 
 export const GetFavoriteCards = async (user) => {
+  const token = localStorage.getItem("USER_TOKEN");
   try {
     const response = await axios.get(`${url}/item/${projectId}_favorites/`, {
       headers: {
