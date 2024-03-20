@@ -3,14 +3,15 @@ import { projectId, token, url } from "../MISC/commonUsage";
 
 export const GetUser = async (UserToken) => {
   try {
-    if (!token) {
+    const userToken = localStorage.getItem("USER_TOKEN");
+    if (!userToken) {
       throw new Error("User token not found in localStorage.");
     }
     const response = await axios.get(
       `${url}/user/object/${projectId}/${UserToken.Email}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );
@@ -22,15 +23,16 @@ export const GetUser = async (UserToken) => {
 };
 
 export const DeleteUser = async (email) => {
+  const userToken = localStorage.getItem("USER_TOKEN");
   try {
-    if (!token) {
+    if (!userToken) {
       throw new Error("User token not found in localStorage.");
     }
     const response = await axios.delete(
       `${url}/user/object/${projectId}/${email}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );
@@ -71,13 +73,14 @@ export const EditUser = async (userData) => {
 };
 
 export const GetUsers = async () => {
+  const userToken = localStorage.getItem("USER_TOKEN");
   try {
-    if (!token) {
+    if (!userToken) {
       throw new Error("User token not found in localStorage.");
     }
     const response = axios.get(`${url}/user/${projectId}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${userToken}`,
       },
     });
     return response;
