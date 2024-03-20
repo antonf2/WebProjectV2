@@ -77,7 +77,7 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
       const uploadData2 = {
         Data: [...existingItemWithSameUser.Data, ...favData],
       };
-      const response = await axios.put(
+      await axios.put(
         `${url}/item/${projectId}_favorites/${existingItemWithSameUser.ItemID}/`,
         uploadData2,
         {
@@ -86,24 +86,19 @@ export const ManageFavoriteCard = async (CardID, user, userToken, favData) => {
           },
         }
       );
-      return response;
+      return;
     } else {
       const uploadData = {
         Scope: "Public",
         Data: favData,
       };
 
-      const response = await axios.post(
-        `${url}/item/${projectId}_favorites/`,
-        uploadData,
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      );
-
-      return response;
+      axios.post(`${url}/item/${projectId}_favorites/`, uploadData, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      return;
     }
   } catch (error) {
     console.error("Error managing favorite card:", error);
