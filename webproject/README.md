@@ -24,6 +24,4 @@ The API is split to 3 files, 1 for each of the categories - Card,Favorites,Users
 
 There are also loaders which are used to provide data to different routes before they render, they receive the data from the API.
 
-Other functions are
-
 PLEASE NOTE THAT SOME OF THE USER INFORMATION DOESN'T CHANGE ON EDIT BECAUSE OF ISSUES WITH SIMON'S API.
